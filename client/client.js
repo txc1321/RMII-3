@@ -3,6 +3,13 @@ const handleError = (message) => {
   $("#domoMessage").animate({width:'toggle'},350);
 }
 
+//form top left
+//optional columns for priority
+//list by dateCreated
+//sort by dateDue, priotity master list
+
+//Implement sharing
+
 const sendAjax = (action, data) => {
   $.ajax({
     cache: false,
