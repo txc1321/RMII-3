@@ -43,9 +43,9 @@ const TicketSchema = new mongoose.Schema({
 
 TicketSchema.statics.toAPI = (doc) => ({
   title: doc.title,
-  description: doc.description,
   priority: doc.priority,
   dueDate: doc.dueDate,
+  description: doc.description,
 });
 
 TicketSchema.statics.findByOwner = (ownerID, callback) => {

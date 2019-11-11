@@ -1,14 +1,6 @@
 const handleError = (message) => {
-  $('#errorMessage').text(message);
-  $('#domoMessage').animate({ width: 'toggle' }, 350);
+  console.log(message);
 };
-
-// form top left
-// optional columns for priority
-// list by dateCreated
-// sort by dateDue, priotity master list
-
-// Implement sharing
 
 const sendAjax = (action, data) => {
   $.ajax({
@@ -18,8 +10,7 @@ const sendAjax = (action, data) => {
     data,
     dataType: 'json',
     success: (result, status, xhr) => {
-      $('#domoMessage').animate({ width: 'hide' }, 350);
-
+    
       window.location = result.redirect;
     },
     error: (xhr, status, error) => {
@@ -33,8 +24,6 @@ const sendAjax = (action, data) => {
 $(document).ready(() => {
   $('#signupForm').on('submit', (e) => {
     e.preventDefault();
-
-    $('#domoMessage').animate({ width: 'hide' }, 350);
 
     if ($('#user').val() === '' || $('#pass').val() === '' || $('#pass2').val() === '') {
       handleError('RAWR! All fields are required');
@@ -54,8 +43,6 @@ $(document).ready(() => {
   $('#loginForm').on('submit', (e) => {
     e.preventDefault();
 
-    $('#domoMessage').animate({ width: 'hide' }, 350);
-
     if ($('#user').val() === '' || $('#pass').val() === '') {
       handleError('RAWR! Username or password is empty');
       return false;
@@ -68,8 +55,6 @@ $(document).ready(() => {
 
   $('#ticketForm').on('submit', (e) => {
     e.preventDefault();
-
-    $('#domoMessage').animate({ width: 'hide' }, 350);
 
     if ($('#ticketTitle').val() === '' ||
         $('#ticketPriority').val() === '' ||

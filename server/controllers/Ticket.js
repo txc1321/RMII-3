@@ -9,7 +9,42 @@ const getTickets = (req, res) => {
 };
 
 const groupTickets = (req, res) => {
-  const tickets = [];
+  const allTickets = Ticket.TicketModel.findByOwner(req.session.account._id, 
+    (err, docs) => {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({ error: 'An error has occurred' });
+      }
+
+      return docs;
+      
+  });
+
+  const newTickets = [];
+
+  allTickets.then(() => {
+    for (let i = 5; i > 0; i--) {
+      const priorityList = {
+        number: i,
+        tickets: [],
+      };
+      console.log(allTickets);
+      allTickets.each(element => {
+        if(element.priority === i){
+          console.log("hey");
+          priority.tickets.push(element);
+        }
+      });{
+        console.log("help");
+        
+      }
+      newTickets.push(priorityList);
+    }
+  });
+
+ 
+
+  /* const tickets = [];
 
   const allTicketsData = {
     tickets: Ticket.TicketModel.findByOwner(req.session.account._id, 
@@ -26,25 +61,28 @@ const groupTickets = (req, res) => {
   const newTicketStruct = new TicketStruct.TicketStructModel(allTicketsData);
   const ticketStructPromise = newTicketStruct.save();
   ticketStructPromise.then(() => {
+    console.log(newTicketStruct.tickets);
+    console.log(" - ");
     for (let i = 5; i > 0; i--) {
       const priorityList = {
         number: i,
         tickets: [],
       };
-      if(ticketStructPromise.tickets[i].priority === i){
-        priority.tickets.push(ticketStructPromise.tickets[i]);
+      for(let j = 0; j < newTicketStruct.tickets.count; j++){
+        if(newTicketStruct.tickets[j]){
+          priority.tickets.push(newTicketStruct.tickets[j]);
+        }
       }
-      console.log(priorityList);
       tickets.push(priorityList);
     }
+
+    return tickets;
   })
   ticketStructPromise.catch((err) => {
     console.log(err);
 
     return res.status(400).json({ error: 'An error has occurred' });
-  });
-
-  return tickets;
+  }); */
 }
 
 const makeTicket = (req, res) => {
