@@ -5,6 +5,8 @@ const _ = require('underscore');
 const convertID = mongoose.Types.ObjectId;
 const setTitle = (title) => _.escape(title).trim();
 
+let TicketModel = {};
+
 const TicketSchema = new mongoose.Schema({
   title: {
     type: String,

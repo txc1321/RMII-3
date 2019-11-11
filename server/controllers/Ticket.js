@@ -2,15 +2,6 @@ const models = require('../models');
 const Ticket = models.Ticket;
 
 const getTickets = (req, res) => {
-  /* Ticket.TicketModel.findByOwner(req.session.account._id, (err, docs) => {
-    if (err) {
-      console.log(err);
-      return res.status(400).json({ error: 'An error has occurred' });
-    }
-
-    return res.render('app', { csrfToken: req.csrfToken(), tickets: docs });
-  }); */
-
   const tickets = [];
 
   for (let i = 5; i > 0; i--) {
@@ -34,7 +25,8 @@ const groupTickets = (req, res, priority) => {
       }
 
       return docs;
-    })
+    }) // move to getTickets, make a savepromise (loop in promise.then)
+    //can do in this method
   
   console.log(tickets);
   return tickets;
@@ -70,9 +62,26 @@ const makeTicket = (req, res) => {
 };
 
 const resolveTicket = (request, response) => {
-    // delete by ID
+    const req = request;
+    const res = response;
+
+    const ticketPromise = Ticket.TicketModel.deleteOne({ id: req.body._id }, (err) => {
+      if (err) {
+        return res.status(400).json({ error: 'An error occurred' });
+      }
+
+      return false;
+    });
+    ticketPromise.then(() => res.json({ redirect: '/main' }));
+    ticketPromise.catch((err) => {
+      console.log(err);
+
+      return res.status(400).json({ error: 'An error has occured' });
+    });
+
+    return ticketPromise;
 };
 
 module.exports.getTickets = getTickets;
-module.exports.make = makeTicket;
-module.exports.resolve = resolveTicket;
+module.exports.makeTicket = makeTicket;
+module.exports.resolveTicket = resolveTicket;

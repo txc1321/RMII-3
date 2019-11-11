@@ -17,6 +17,14 @@
           {{#each priorities}}
             <div class="ticketContainer">
                 <h3>Priority: {{this.number}}</h3>
+                <div class="btn-group btn-group-toggle sortButtons" data-toggle="buttons">
+                  <label class="btn btn-primary active">
+                    <input type="radio" name="options" id="option1" autocomplete="off" checked> Date Created
+                  </label>
+                  <label class="btn btn-primary">
+                    <input type="radio" name="options" id="option2" autocomplete="off"> Date Due
+                  </label>
+                </div>
                 {{#if this.tickets}}
                     <div class="tickets">
                         {{#each this.tickets}}

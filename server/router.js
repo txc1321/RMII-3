@@ -8,8 +8,8 @@ const router = (app) => {
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
-  app.post('/makeTicket', mid.requiresLogin, controllers.Ticket.make);
-  app.delete('/resolveTicket', mid.requiresLogin, controllers.Ticket.resolve);
+  app.post('/makeTicket', mid.requiresLogin, controllers.Ticket.makeTicket);
+  app.delete('/resolveTicket', mid.requiresLogin, controllers.Ticket.resolveTicket);
 };
 
 module.exports = router;
