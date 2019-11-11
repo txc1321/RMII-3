@@ -1,34 +1,49 @@
 const models = require('../models');
 const Ticket = models.Ticket;
+const TicketStruct = models.TicketStruct;
 
 const getTickets = (req, res) => {
-  const tickets = [];
-
-  for (let i = 5; i > 0; i--) {
-    const priority = {
-      tickets: groupTickets(req, res, i),
-      number: i,
-    };
-    
-    tickets.push(priority);
-  }
+  const tickets = groupTickets(req, res);
 
   return res.render('app', { csrfToken: req.csrfToken(), priorities: tickets });
 };
 
-const groupTickets = (req, res, priority) => {
-  const tickets = Ticket.TicketModel.findByPriority(req.session.account._id, priority,
-    (err, docs) => {
-      if (err) {
-        console.log(err);
-        return res.status(400).json({ error: 'An error has occurred' });
-      }
+const groupTickets = (req, res) => {
+  const tickets = [];
 
-      return docs;
-    }) // move to getTickets, make a savepromise (loop in promise.then)
-    //can do in this method
+  const allTicketsData = {
+    tickets: Ticket.TicketModel.findByOwner(req.session.account._id, 
+      (err, docs) => {
+        if (err) {
+          console.log(err);
+          return res.status(400).json({ error: 'An error has occurred' });
+        }
   
-  console.log(tickets);
+        return docs;
+    }),
+  };
+
+  const newTicketStruct = new TicketStruct.TicketStructModel(allTicketsData);
+  const ticketStructPromise = newTicketStruct.save();
+  ticketStructPromise.then(() => {
+    for (let i = 5; i > 0; i--) {
+      const priorityList = {
+        number: i,
+        tickets: [],
+      };
+      if(ticketStructPromise.tickets[i].priority === i){
+        priority.tickets.push(ticketStructPromise.tickets[i]);
+      }
+      console.log(priorityList);
+      tickets.push(priorityList);
+    }
+  })
+  ticketStructPromise.catch((err) => {
+    console.log(err);
+
+    return res.status(400).json({ error: 'An error has occurred' });
+  });
+
   return tickets;
 }
 
