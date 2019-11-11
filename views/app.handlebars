@@ -8,15 +8,15 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-  <nav><a href="/login"><img id="logo" src="/assets/img/logo.png" alt="logo"/></a>
-    <div class="navlink"><a href="/logout">Log out</a></div>
+  <nav><a href="/login"><img id="logo" class="logo" src="/assets/img/logo.png" alt="logo"/></a>
+    <button class="btn btn-primary navlink"><a href="/logout">Log out</a></button>
   </nav>
 
   <section id="tickets">
       {{#if priorities}}
           {{#each priorities}}
             <div class="ticketContainer">
-                <h3>{{this.number}}</h3>
+                <h3>Priority: {{this.number}}</h3>
                 {{#if this.tickets}}
                     <div class="tickets">
                         {{#each this.tickets}}
@@ -40,17 +40,21 @@
   <section id="makeTicket">
       <div class="ticketFormContainer">
           <form id="ticketForm" name="ticketForm" action="/makeTicket" method="POST" class="ticketForm">
+            <div class="row">
               <label for="title">Title: </label>
-              <input id="ticketTitle" type="text" name="title" placeholder="Title"/>
+              <input id="ticketTitle" class="form-control" type="text" name="title" placeholder="Title"/>
               <label for="priority">Priority: </label>
-              <input id="ticketPriority" type="text" name="priority" placeholder="Priority"/>
+              <input id="ticketPriority" class="form-control" type="text" name="priority" placeholder="Priority"/>
               <label for="dueDate">Due Date: </label>
-              <input id="ticketDueDate" type="date" name="dueDate" placeholder="Due Date"/>
+              <input class="form-control" id="ticketDueDate" type="date" name="dueDate" placeholder="Due Date"/>
+            </div>
+            <div class="row">
               <label for="description">Description: </label>
-              <input id="ticketDesc" type="text" name="description" placeholder="Description"/>
+              <input class="form-control" id="ticketDesc" type="text" name="description" placeholder="Description" />
               <input type="hidden" name="_csrf" value={{csrfToken}} />
-              <input class="makeDomoSubmit" type="submit" value="Make Ticket" />
-          </form>
+              <input class="makeTicketSubmit btn btn-primary" type="submit" value="Make Ticket" />
+            </div>
+            </form>
       </div>
   </section>
   <div id="domoMessage"><img id="speech" src="/assets/img/speech.png" alt="speech box"/>

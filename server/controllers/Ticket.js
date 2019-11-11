@@ -15,25 +15,30 @@ const getTickets = (req, res) => {
 
   for (let i = 5; i > 0; i--) {
     const priority = {
-      tickets: Ticket.TicketModel.findByPriority(
-          req.session.account._id,
-          i,
-          (err, docs) => {
-            if (err) {
-              console.log(err);
-              return res.status(400).json({ error: 'An error has occurred' });
-            }
-
-            return docs;
-          }),
+      tickets: groupTickets(req, res, i),
       number: i,
     };
-    console.log(priority);
+    
     tickets.push(priority);
   }
 
   return res.render('app', { csrfToken: req.csrfToken(), priorities: tickets });
 };
+
+const groupTickets = (req, res, priority) => {
+  const tickets = Ticket.TicketModel.findByPriority(req.session.account._id, priority,
+    (err, docs) => {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({ error: 'An error has occurred' });
+      }
+
+      return docs;
+    })
+  
+  console.log(tickets);
+  return tickets;
+}
 
 const makeTicket = (req, res) => {
   if (!req.body.title || !req.body.priority || !req.body.dueDate) {

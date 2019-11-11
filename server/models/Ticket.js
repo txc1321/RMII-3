@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const _ = require('underscore');
 
-let TicketModel = {};
-
 const convertID = mongoose.Types.ObjectId;
 const setTitle = (title) => _.escape(title).trim();
 
