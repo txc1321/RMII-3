@@ -17,7 +17,10 @@ html, body {
 nav {
     width: 100%;
     height: 50px;
-    background-color: #55acee;
+    background-color: #FFFFFF;
+    border-bottom: black solid 2px;
+    margin-bottom: 10px;
+    position: fixed;
 }
 
 nav:nth-child(1) {
@@ -25,12 +28,12 @@ nav:nth-child(1) {
 }
 
 .navlink {
+    float: right;
     padding: 5px;
     padding-top: 12px;
     padding-left: 20px;
     color: white;
     font-size: 1.3em;
-    float: left;
 }
 
 .navlink a, .navlink a:link, .navlink a:visited, .navlink a:hover, .navlink a:active {
@@ -38,13 +41,47 @@ nav:nth-child(1) {
     text-decoration: none;
     padding: 5px;
     border-radius: 4px;
-    background-color: #55acee;
+    background-color: #00aeff;
     transition: background-color 0.4s ease;
 }
 
 .navlink a:hover {
     transition: background-color 0.8s ease;
     background-color: #66bdff;
+}
+
+.ticketContainer{
+    display: inline-block;
+    width: 325px;
+    height: 700px;
+    margin: 75px 35px 15px 15px;
+}
+
+.tickets{
+    width: 350px;
+    height: 650px;
+    overflow-y: scroll;
+}
+
+.ticket{
+    width: 300px;
+}
+
+.ticketTitle{
+    font-size: 20px;
+}
+
+.ticketPriority, .ticketDueDate, .ticketDesc{
+    font-size: 15px;
+}
+
+.ticketFormContainer{
+    padding-left: 400px;
+}
+
+.ticketForm{
+    width: auto;
+    margin-top: 25px;
 }
 
 .domoForm {
@@ -75,7 +112,7 @@ nav:nth-child(1) {
     transition: background-color 0.4s ease;
     display: inline;
     width: 90px;
-    background-color: #55acee;
+    background-color: #00aeff;
     border-radius: 2px;
     color: white;
     text-decoration: none;
@@ -185,7 +222,7 @@ nav:nth-child(1) {
     height: 450px;
     width: 300px;
     -ms-transform: rotate(330deg);
-    -webkit-transform: rotate(330deg); 
+    -webkit-transform: rotate(330deg);
     transform: rotate(330deg);
 }
 
