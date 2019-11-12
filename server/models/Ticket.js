@@ -56,15 +56,6 @@ TicketSchema.statics.findByOwner = (ownerID, callback) => {
   return TicketModel.find(search).select('title description priority dueDate').exec(callback);
 };
 
-TicketSchema.statics.findByPriority = (ownerID, priority, callback) => {
-  const search = {
-    owner: ownerID,
-    priority,
-  };
-
-  return TicketModel.find(search).select('title description priority dueDate').exec(callback);
-};
-
 TicketModel = mongoose.model('Ticket', TicketSchema);
 
 module.exports.TicketModel = TicketModel;

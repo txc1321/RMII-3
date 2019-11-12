@@ -1,89 +1,55 @@
 const models = require('../models');
 const Ticket = models.Ticket;
-const TicketStruct = models.TicketStruct;
-
-const getTickets = (req, res) => {
-  const tickets = groupTickets(req, res);
-
-  return res.render('app', { csrfToken: req.csrfToken(), priorities: tickets });
-};
 
 const groupTickets = (req, res) => {
-  const allTickets = Ticket.TicketModel.findByOwner(req.session.account._id, 
+  let allTickets = [];
+  const ticketsPromise = Ticket.TicketModel.findByOwner(req.session.account._id,
     (err, docs) => {
       if (err) {
         console.log(err);
-        return res.status(400).json({ error: 'An error has occurred' });
+        return res.status(400).json({error: 'An error has occurred'});
       }
+      allTickets = docs;
+      return false;
+    });
 
-      return docs;
-      
-  });
+  ticketsPromise.then(() => {
+    const priorityTickets = {
+      numbers: [],
+      tickets: [],
+    };
 
-  const newTickets = [];
+    const sortStruct = {
+      tickets: [],
+    };
 
-  allTickets.then(() => {
-    for (let i = 5; i > 0; i--) {
-      const priorityList = {
-        number: i,
-        tickets: [],
-      };
-      console.log(allTickets);
-      allTickets.each(element => {
-        if(element.priority === i){
-          console.log("hey");
-          priority.tickets.push(element);
-        }
-      });{
-        console.log("help");
-        
-      }
-      newTickets.push(priorityList);
-    }
-  });
-
- 
-
-  /* const tickets = [];
-
-  const allTicketsData = {
-    tickets: Ticket.TicketModel.findByOwner(req.session.account._id, 
-      (err, docs) => {
-        if (err) {
-          console.log(err);
-          return res.status(400).json({ error: 'An error has occurred' });
-        }
-  
-        return docs;
-    }),
-  };
-
-  const newTicketStruct = new TicketStruct.TicketStructModel(allTicketsData);
-  const ticketStructPromise = newTicketStruct.save();
-  ticketStructPromise.then(() => {
-    console.log(newTicketStruct.tickets);
-    console.log(" - ");
-    for (let i = 5; i > 0; i--) {
-      const priorityList = {
-        number: i,
-        tickets: [],
-      };
-      for(let j = 0; j < newTicketStruct.tickets.count; j++){
-        if(newTicketStruct.tickets[j]){
-          priority.tickets.push(newTicketStruct.tickets[j]);
+    for (let i = 1; i < 6; i++) {
+      const priorityArray = [];
+      for (let j = 0; j < allTickets.length; j++) {
+        if (allTickets[j].priority === i) {
+          priorityArray.push(allTickets[j]);
         }
       }
-      tickets.push(priorityList);
+      sortStruct.tickets.push(priorityArray);
     }
 
-    return tickets;
-  })
-  ticketStructPromise.catch((err) => {
-    console.log(err);
+    for (let i = 5; i > 0; i--) {
+      /* const priorityList = {
+        number: i,
+        tickets: sortStruct.tickets[i - 1],
+      }; */
+      priorityTickets.numbers.push(i);
+      priorityTickets.tickets.push(sortStruct.tickets[i - 1]);
+    }
 
-    return res.status(400).json({ error: 'An error has occurred' });
-  }); */
-}
+    console.log(priorityTickets.tickets);
+    return res.render('app', { csrfToken: req.csrfToken(), priorities: priorityTickets });
+  });
+};
+
+const getTickets = (req, res) => {
+  groupTickets(req, res);
+};
 
 const makeTicket = (req, res) => {
   if (!req.body.title || !req.body.priority || !req.body.dueDate) {

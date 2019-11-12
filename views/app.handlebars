@@ -13,10 +13,10 @@
   </nav>
 
   <section id="tickets">
-      {{#if priorities}}
-          {{#each priorities}}
+      {{#if priorities.numbers}}
+          {{#each priorities.numbers}}
             <div class="ticketContainer">
-                <h3>Priority: {{this.number}}</h3>
+                <h3>Priority: {{this}}</h3>
                 <div class="btn-group btn-group-toggle sortButtons" data-toggle="buttons">
                   <label class="btn btn-primary active">
                     <input type="radio" name="options" id="option1" autocomplete="off" checked> Date Created
@@ -25,22 +25,22 @@
                     <input type="radio" name="options" id="option2" autocomplete="off"> Date Due
                   </label>
                 </div>
-                {{#if this.tickets}}
+                {{#if priorities.tickets.[this-1]}}
                     <div class="tickets">
-                        {{#each this.tickets}}
-                            <div class="ticket">
-                                <h3 class="ticketTitle">Title: {{this.tickets.title}}</h3>
-                                <h3 class="ticketPriority">Priority: {{this.tickets.priority}}</h3>
-                                <h3 class="ticketDueDate">Due Date: {{this.tickets.dueDate}}</h3>
-                                <h3 class="ticketDesc">Description: {{this.tickets.description}}</h3>
-                            </div>
-                        {{/each}}
+                            {{#each priorities.tickets.[this]}}
+                                <div class="ticket">
+                                    <h3 class="ticketTitle">Title: {{this.title}}</h3>
+                                    <h3 class="ticketPriority">Priority: {{this.priority}}</h3>
+                                    <h3 class="ticketDueDate">Due Date: {{this.dueDate}}</h3>
+                                    <h3 class="ticketDesc">Description: {{this.description}}</h3>
+                                </div>
+                            {{/each}}
                     </div>
+                {{else}}
+                    <h3 class="emptyTickets">No Tickets</h3>
                 {{/if}}
             </div>
           {{/each}}
-      {{else}}
-        <h3 class="emptyTickets">No Tickets</h3>
       {{/if}}
 
 
