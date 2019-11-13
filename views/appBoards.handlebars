@@ -15,7 +15,7 @@
 <section id="boards">
     {{#if boards}}
         <div class="remainingBoards">
-            <h3 class="boardsLeft">Free Boards Remaining: {{count}}</h3>
+            <h3 class="boardsLeft">Free Boards Remaining: {{math 5 "-" count}}</h3>
             <div class="premium row">
                 <h6 class="premiumCTA">Want to upgrade?</h6>
                 <button class="premiumButton btn btn-primary">Upgrade</button>
@@ -32,9 +32,14 @@
                             <h4 class="boardLabel">Tickets: None</h4>
                         {{/if}}
                     </div>
-                    <button class="boardButton btn btn-primary" onclick=goToBoard(this.id)>View</button>
-                    <form id="boardDeleteForm" name="boardDeleteForm" action="/deleteBoard" method="POST" class="boardDeleteForm">
-                        <input type="hidden" name="_csrf" value={{csrfToken}} />
+                    <form id="boardNavigateForm" name="boardNavigateForm" action="/goToBoard" method="POST" class="boardNavigateForm">
+                        <input type="hidden" name="_csrf" value={{../csrfToken}} />
+                        <input type="hidden" name="_id" value={{this.id}} />
+                        <input class="boardNavigateSubmit btn btn-primary" type="submit" value="View"/>
+                    </form>
+                    <form id="boardDeleteForm" name="boardDeleteForm" action="/deleteBoard" method="delete" class="boardDeleteForm">
+                        <input type="hidden" name="_csrf" value={{../csrfToken}} />
+                        <input type="hidden" name="_id" value={{this.id}} />
                         <input class="deleteBoardSubmit btn btn-primary" type="submit" value="X"/>
                     </form>
                 </div>

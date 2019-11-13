@@ -14,10 +14,10 @@
   </nav>
 
   <section id="tickets">
-      {{#if priorities.numbers}}
-          {{#each priorities.numbers}}
+      {{#if priorities.tickets}}
+          {{#each priorities.tickets}}
             <div class="ticketContainer">
-                <h3>Priority: {{this}}</h3>
+                <h3>Priority: {{math @index "+" 1}}</h3>
                 <div class="btn-group btn-group-toggle sortButtons" data-toggle="buttons">
                   <label class="btn btn-primary active">
                     <input type="radio" name="options" id="option1" autocomplete="off" checked> Date Created
@@ -26,9 +26,9 @@
                     <input type="radio" name="options" id="option2" autocomplete="off"> Date Due
                   </label>
                 </div>
-                {{#if priorities.tickets.[this-1]}}
+                {{#if this}}
                     <div class="tickets">
-                            {{#each priorities.tickets.[this]}}
+                            {{#each this}}
                                 <div class="ticket">
                                     <h3 class="ticketTitle">Title: {{this.title}}</h3>
                                     <h3 class="ticketPriority">Priority: {{this.priority}}</h3>

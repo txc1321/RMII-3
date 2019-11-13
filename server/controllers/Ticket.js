@@ -1,9 +1,9 @@
 const models = require('../models');
 const Ticket = models.Ticket;
 
-const groupTickets = (req, res) => {
+const groupTickets = (req, res, boardID) => {
   let allTickets = [];
-  const ticketsPromise = Ticket.TicketModel.findByOwner(req.session.account._id,
+  const ticketsPromise = Ticket.TicketModel.findByOwnerandBoard(req.session.account._id, boardID,
     (err, docs) => {
       if (err) {
         console.log(err);
@@ -15,7 +15,6 @@ const groupTickets = (req, res) => {
 
   ticketsPromise.then(() => {
     const priorityTickets = {
-      numbers: [],
       tickets: [],
     };
 
@@ -34,12 +33,11 @@ const groupTickets = (req, res) => {
     }
 
     for (let i = 5; i > 0; i--) {
-      priorityTickets.numbers.push(i);
       priorityTickets.tickets.push(sortStruct.tickets[i - 1]);
     }
 
     console.log(priorityTickets.tickets);
-    return res.render('app', { csrfToken: req.csrfToken(), priorities: priorityTickets,});
+    return res.render('app', { csrfToken: req.csrfToken(), priorities: priorityTickets, boardID, });
   });
 };
 

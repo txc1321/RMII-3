@@ -1,5 +1,6 @@
 const models = require('../models');
 const Board = models.Board;
+const Ticket = models.Ticket;
 
 const getBoards = (req, res) => {
   Board.BoardModel.findByOwner(req.session.account._id, (err, docs) => {
@@ -49,7 +50,9 @@ const deleteBoard = (request, response) => {
   const req = request;
   const res = response;
 
-  const boardPromise = Board.BoardModel.deleteOne({ id: req.body._id }, (err) => {
+  console.log(req.body._id);
+
+  const boardPromise = Board.BoardModel.deleteOne({ _id: req.body._id }, (err) => {
     if (err) {
       return res.status(400).json({ error: 'An error occurred' });
     }
@@ -67,12 +70,7 @@ const deleteBoard = (request, response) => {
 };
 
 const goToBoard = (request, response, ID) => {
-  const req = request;
-  const res = response;
-  const boardID = ID;
-
-
-  return res.json({ redirect: '/tickets', boardID });
+  Ticket.TicketModel.groupTickets(request, response, ID);
 };
 
 module.exports.getBoards = getBoards;

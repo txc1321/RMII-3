@@ -59,7 +59,24 @@ app.use(session({
     httpOnly: true,
   },
 }));
-app.engine('handlebars', expressHandlebars({ defaultLayout: 'main' }));
+app.engine('handlebars', expressHandlebars({ defaultLayout: 'main',
+  helpers:{
+    math: function(Ivalue, operator, Rvalue){
+      Ivalue = parseFloat(Ivalue);
+      Rvalue = parseFloat(Rvalue);
+      return{
+        "+": Ivalue + Rvalue,
+        "-": Ivalue - Rvalue,
+        "*": Ivalue * Rvalue,
+        "/": Ivalue / Rvalue,
+        "%": Ivalue % Rvalue
+      }[operator];
+    },
+    execute: function(method){
+      return method;
+    }
+  }
+}));
 app.set('view engine', 'handlebars');
 app.set('views', `${__dirname}/../views`);
 app.use(cookieParser());

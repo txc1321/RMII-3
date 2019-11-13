@@ -2,11 +2,11 @@ const handleError = (message) => {
   console.log(message);
 };
 
-const sendAjax = (action, data) => {
+const sendAjax = (type, action, data) => {
   console.log(data);
   $.ajax({
     cache: false,
-    type: 'POST',
+    type: type,
     url: action,
     data,
     dataType: 'json',
@@ -36,7 +36,7 @@ $(document).ready(() => {
       return false;
     }
 
-    sendAjax($('#signupForm').attr('action'), $('#signupForm').serialize());
+    sendAjax($('#signupForm').attr('method'), $('#signupForm').attr('action'), $('#signupForm').serialize());
 
     return false;
   });
@@ -49,7 +49,7 @@ $(document).ready(() => {
       return false;
     }
 
-    sendAjax($('#loginForm').attr('action'), $('#loginForm').serialize());
+    sendAjax($('#loginForm').attr('method'), $('#loginForm').attr('action'), $('#loginForm').serialize());
 
     return false;
   });
@@ -64,7 +64,7 @@ $(document).ready(() => {
       return false;
     }
 
-    sendAjax($('#ticketForm').attr('action'), $('#ticketForm').serialize());
+    sendAjax($('#ticketForm').attr('method'), $('#ticketForm').attr('action'), $('#ticketForm').serialize());
 
     return false;
   });
@@ -77,14 +77,14 @@ $(document).ready(() => {
       return false;
     }
 
-    sendAjax($('#boardForm').attr('action'), $('#boardForm').serialize());
+    sendAjax($('#boardForm').attr('method'), $('#boardForm').attr('action'), $('#boardForm').serialize());
 
     return false;
   });
 
   $('#boardDeleteForm').on('submit', (e) => {
     e.preventDefault();
-    sendAjax($('#boardDeleteForm').attr('action'), $('#boardDeleteForm').serialize());
+    sendAjax($('#boardDeleteForm').attr('method'), $('#boardDeleteForm').attr('action'), $('#boardDeleteForm').serialize());
 
     return false;
   });

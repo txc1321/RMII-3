@@ -51,11 +51,13 @@ TicketSchema.statics.toAPI = (doc) => ({
   priority: doc.priority,
   dueDate: doc.dueDate,
   description: doc.description,
+  boardID: doc.boardID,
 });
 
-TicketSchema.statics.findByOwner = (ownerID, callback) => {
+TicketSchema.statics.findByOwnerandBoard = (ownerID, boardID, callback) => {
   const search = {
     owner: convertID(ownerID),
+    boardID,
   };
 
   return TicketModel.find(search).select('title description priority dueDate').exec(callback);
