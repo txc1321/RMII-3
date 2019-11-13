@@ -5,7 +5,6 @@ var handleError = function handleError(message) {
 };
 
 var sendAjax = function sendAjax(type, action, data) {
-  console.log(data);
   $.ajax({
     cache: false,
     type: type,
@@ -85,6 +84,13 @@ $(document).ready(function () {
   $('#boardDeleteForm').on('submit', function (e) {
     e.preventDefault();
     sendAjax($('#boardDeleteForm').attr('method'), $('#boardDeleteForm').attr('action'), $('#boardDeleteForm').serialize());
+
+    return false;
+  });
+
+  $('#boardNavigateForm').on('submit', function (e) {
+    e.preventDefault();
+    sendAjax($('#boardNavigateForm').attr('method'), $('#boardNavigateForm').attr('action'), $('#boardNavigateForm').serialize());
 
     return false;
   });

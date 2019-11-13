@@ -32,7 +32,6 @@ const TicketSchema = new mongoose.Schema({
   },
   boardID: {
     type: String,
-    required: true,
     trim: true,
   },
   owner: {
@@ -57,7 +56,7 @@ TicketSchema.statics.toAPI = (doc) => ({
 TicketSchema.statics.findByOwnerandBoard = (ownerID, boardID, callback) => {
   const search = {
     owner: convertID(ownerID),
-    boardID,
+    boardID: boardID,
   };
 
   return TicketModel.find(search).select('title description priority dueDate').exec(callback);

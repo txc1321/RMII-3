@@ -1,6 +1,7 @@
 const models = require('../models');
+const controllers = require('../controllers');
 const Board = models.Board;
-const Ticket = models.Ticket;
+const Ticket = controllers.Ticket;
 
 const getBoards = (req, res) => {
   Board.BoardModel.findByOwner(req.session.account._id, (err, docs) => {
@@ -69,8 +70,11 @@ const deleteBoard = (request, response) => {
   return boardPromise;
 };
 
-const goToBoard = (request, response, ID) => {
-  Ticket.TicketModel.groupTickets(request, response, ID);
+const goToBoard = (request, response) => {
+  const req = request;
+  const ID = req.body._id;
+
+  Ticket.getTickets(request, response, ID);
 };
 
 module.exports.getBoards = getBoards;

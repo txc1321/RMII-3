@@ -35,14 +35,12 @@ const groupTickets = (req, res, boardID) => {
     for (let i = 5; i > 0; i--) {
       priorityTickets.tickets.push(sortStruct.tickets[i - 1]);
     }
-
-    console.log(priorityTickets.tickets);
-    return res.render('app', { csrfToken: req.csrfToken(), priorities: priorityTickets, boardID, });
+    return res.render('app', { csrfToken: req.csrfToken(), priorities: priorityTickets, boardID: boardID });
   });
 };
 
-const getTickets = (req, res) => {
-  groupTickets(req, res);
+const getTickets = (req, res, ID) => {
+  groupTickets(req, res, ID);
 };
 
 const makeTicket = (req, res) => {
@@ -58,6 +56,8 @@ const makeTicket = (req, res) => {
     boardID: req.body.boardID,
     owner: req.session.account._id,
   };
+
+  console.log(TicketData);
 
   const newTicket = new Ticket.TicketModel(TicketData);
 
