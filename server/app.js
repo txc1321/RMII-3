@@ -72,8 +72,8 @@ app.engine('handlebars', expressHandlebars({ defaultLayout: 'main',
         "%": Ivalue % Rvalue
       }[operator];
     },
-    execute: function(method){
-      return method;
+    boardNav: function(){
+      return ;
     }
   }
 }));

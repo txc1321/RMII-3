@@ -32,11 +32,7 @@
                             <h4 class="boardLabel">Tickets: None</h4>
                         {{/if}}
                     </div>
-                    <form id="boardNavigateForm" name="boardNavigateForm" action="/goToBoard" method="POST" class="boardNavigateForm">
-                        <input type="hidden" name="_csrf" value={{../csrfToken}} />
-                        <input type="hidden" name="_id" value={{this.id}} />
-                        <input class="boardNavigateSubmit btn btn-primary" type="submit" value="View"/>
-                    </form>
+                    <button class="boardNavButton btn btn-primary" onclick="{{boardNav this.id}}">X</button>
                     <form id="boardDeleteForm" name="boardDeleteForm" action="/deleteBoard" method="delete" class="boardDeleteForm">
                         <input type="hidden" name="_csrf" value={{../csrfToken}} />
                         <input type="hidden" name="_id" value={{this.id}} />
