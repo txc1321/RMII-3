@@ -30,6 +30,11 @@ const TicketSchema = new mongoose.Schema({
     required: true,
     default: Date.now,
   },
+  boardID: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   owner: {
     type: mongoose.Schema.ObjectId,
     required: true,

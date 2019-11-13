@@ -16,7 +16,6 @@ const BoardSchema = new mongoose.Schema({
   },
   tickets: {
     type: Array,
-    required: true,
   },
   owner: {
     type: mongoose.Schema.ObjectId,

@@ -1,0 +1,67 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Co-Lab</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link rel="shortcut icon" href="/assets/img/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<nav><a href="/login"><img id="logo" class="logo" src="/assets/img/logo.png" alt="logo"/></a>
+    <button class="btn btn-primary navlink"><a href="/logout">Log out</a></button>
+</nav>
+
+<section id="boards">
+    {{#if boards}}
+        <div class="remainingBoards">
+            <h3 class="boardsLeft">Free Boards Remaining: {{count}}</h3>
+            <div class="premium row">
+                <h6 class="premiumCTA">Want to upgrade?</h6>
+                <button class="premiumButton btn btn-primary">Upgrade</button>
+            </div>
+        </div>
+        {{#each boards}}
+            <div class="board">
+                <div class="row">
+                    <h4 class="boardLabel">Name: {{this.name}}</h4>
+                    <div class="boardInfo">
+                        {{#if this.tickets}}
+                            <h4 class="boardLabel">Tickets: {{this.tickets.count}}</h4>
+                        {{else}}
+                            <h4 class="boardLabel">Tickets: None</h4>
+                        {{/if}}
+                    </div>
+                    <button class="boardButton btn btn-primary" onclick=goToBoard(this.id)>View</button>
+                    <form id="boardDeleteForm" name="boardDeleteForm" action="/deleteBoard" method="POST" class="boardDeleteForm">
+                        <input type="hidden" name="_csrf" value={{csrfToken}} />
+                        <input class="deleteBoardSubmit btn btn-primary" type="submit" value="X"/>
+                    </form>
+                </div>
+            </div>
+        {{/each}}
+    {{else}}
+        <h3 class="emptyBoards">No Boards</h3>
+    {{/if}}
+</section>
+<section id="makeBoard">
+    <div class="boardFormContainer">
+        <form id="boardForm" name="boardForm" action="/makeBoard" method="POST" class="boardForm">
+            <div class="row">
+                <label for="name">Name: </label>
+                <input id="boardName" class="form-control" type="text" name="name" placeholder="Name"/>
+                <input type="hidden" name="_csrf" value={{csrfToken}} />
+                <input type="hidden" name="boardCount" value={{count}} />
+                <input class="makeBoardSubmit btn btn-primary" type="submit" value="Make Board" />
+            </div>
+        </form>
+    </div>
+</section>
+<div id="domoMessage"><img id="speech" src="/assets/img/speech.png" alt="speech box"/>
+    <h3><span id="errorMessage"></span></h3><img id="domo" src="assets/img/domo.png" alt="domo"/>
+</div>
+<script src="/assets/bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

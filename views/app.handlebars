@@ -9,6 +9,7 @@
 </head>
 <body>
   <nav><a href="/login"><img id="logo" class="logo" src="/assets/img/logo.png" alt="logo"/></a>
+    <button class="btn btn-primary navlink"><a href="/boards">Boards</a></button>
     <button class="btn btn-primary navlink"><a href="/logout">Log out</a></button>
   </nav>
 
@@ -33,6 +34,7 @@
                                     <h3 class="ticketPriority">Priority: {{this.priority}}</h3>
                                     <h3 class="ticketDueDate">Due Date: {{this.dueDate}}</h3>
                                     <h3 class="ticketDesc">Description: {{this.description}}</h3>
+                                    <button class="deleteButton">X</button>
                                 </div>
                             {{/each}}
                     </div>
@@ -59,6 +61,7 @@
             <div class="row">
               <label for="description">Description: </label>
               <input class="form-control" id="ticketDesc" type="text" name="description" placeholder="Description" />
+              <input type="hidden" name="boardID" value={{boardID}}>
               <input type="hidden" name="_csrf" value={{csrfToken}} />
               <input class="makeTicketSubmit btn btn-primary" type="submit" value="Make Ticket" />
             </div>

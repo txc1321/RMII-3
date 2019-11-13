@@ -5,6 +5,7 @@ var handleError = function handleError(message) {
 };
 
 var sendAjax = function sendAjax(action, data) {
+  console.log(data);
   $.ajax({
     cache: false,
     type: 'POST',
@@ -64,6 +65,26 @@ $(document).ready(function () {
     }
 
     sendAjax($('#ticketForm').attr('action'), $('#ticketForm').serialize());
+
+    return false;
+  });
+
+  $('#boardForm').on('submit', function (e) {
+    e.preventDefault();
+
+    if ($('#boardName').val() === '') {
+      handleError('RAWR! All fields are required');
+      return false;
+    }
+
+    sendAjax($('#boardForm').attr('action'), $('#boardForm').serialize());
+
+    return false;
+  });
+
+  $('#boardDeleteForm').on('submit', function (e) {
+    e.preventDefault();
+    sendAjax($('#boardDeleteForm').attr('action'), $('#boardDeleteForm').serialize());
 
     return false;
   });

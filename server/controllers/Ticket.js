@@ -7,7 +7,7 @@ const groupTickets = (req, res) => {
     (err, docs) => {
       if (err) {
         console.log(err);
-        return res.status(400).json({error: 'An error has occurred'});
+        return res.status(400).json({ error: 'An error has occurred' });
       }
       allTickets = docs;
       return false;
@@ -34,16 +34,12 @@ const groupTickets = (req, res) => {
     }
 
     for (let i = 5; i > 0; i--) {
-      /* const priorityList = {
-        number: i,
-        tickets: sortStruct.tickets[i - 1],
-      }; */
       priorityTickets.numbers.push(i);
       priorityTickets.tickets.push(sortStruct.tickets[i - 1]);
     }
 
     console.log(priorityTickets.tickets);
-    return res.render('app', { csrfToken: req.csrfToken(), priorities: priorityTickets });
+    return res.render('app', { csrfToken: req.csrfToken(), priorities: priorityTickets,});
   });
 };
 
@@ -61,13 +57,14 @@ const makeTicket = (req, res) => {
     description: req.body.description,
     priority: req.body.priority,
     dueDate: req.body.dueDate,
+    boardID: req.body.boardID,
     owner: req.session.account._id,
   };
 
   const newTicket = new Ticket.TicketModel(TicketData);
 
   const ticketPromise = newTicket.save();
-  ticketPromise.then(() => res.json({ redirect: '/main' }));
+  ticketPromise.then(() => res.json({ redirect: '/tickets' }));
   ticketPromise.catch((err) => {
     console.log(err);
     if (err.code === 11000) {
@@ -81,24 +78,24 @@ const makeTicket = (req, res) => {
 };
 
 const resolveTicket = (request, response) => {
-    const req = request;
-    const res = response;
+  const req = request;
+  const res = response;
 
-    const ticketPromise = Ticket.TicketModel.deleteOne({ id: req.body._id }, (err) => {
-      if (err) {
-        return res.status(400).json({ error: 'An error occurred' });
-      }
+  const ticketPromise = Ticket.TicketModel.deleteOne({ id: req.body._id }, (err) => {
+    if (err) {
+      return res.status(400).json({ error: 'An error occurred' });
+    }
 
-      return false;
-    });
-    ticketPromise.then(() => res.json({ redirect: '/main' }));
-    ticketPromise.catch((err) => {
-      console.log(err);
+    return false;
+  });
+  ticketPromise.then(() => res.json({ redirect: '/tickets' }));
+  ticketPromise.catch((err) => {
+    console.log(err);
 
-      return res.status(400).json({ error: 'An error has occured' });
-    });
+    return res.status(400).json({ error: 'An error has occured' });
+  });
 
-    return ticketPromise;
+  return ticketPromise;
 };
 
 module.exports.getTickets = getTickets;
