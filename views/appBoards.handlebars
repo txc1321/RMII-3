@@ -10,6 +10,7 @@
 <body>
 <nav><a href="/login"><img id="logo" class="logo" src="/assets/img/logo.png" alt="logo"/></a>
     <button class="btn btn-primary navlink"><a href="/logout">Log out</a></button>
+    <button class="btn btn-primary navlink"><a href="/changepass">Change Password</a></button>
 </nav>
 
 <section id="boards">
@@ -32,8 +33,12 @@
                             <h4 class="boardLabel">Tickets: None</h4>
                         {{/if}}
                     </div>
-                    <button class="boardNavButton btn btn-primary" onclick="{{boardNav this.id}}">X</button>
-                    <form id="boardDeleteForm" name="boardDeleteForm" action="/deleteBoard" method="delete" class="boardDeleteForm">
+                    <form id={{concat "boardNavForm" @index}} name={{concat "boardNavForm" @index}} action="/boardNav" method="POST" class="boardNavForm">
+                        <input type="hidden" name="_csrf" value={{../csrfToken}} />
+                        <input type="hidden" name="_id" value={{this.id}} />
+                        <input class="boardNavSubmit btn btn-primary" type="submit" value="View"/>
+                    </form>
+                    <form id={{concat "boardDeleteForm" @index}} name={{concat "boardDeleteForm" @index}} action="/deleteBoard" method="delete" class="boardDeleteForm">
                         <input type="hidden" name="_csrf" value={{../csrfToken}} />
                         <input type="hidden" name="_id" value={{this.id}} />
                         <input class="deleteBoardSubmit btn btn-primary" type="submit" value="X"/>

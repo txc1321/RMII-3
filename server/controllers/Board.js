@@ -72,9 +72,10 @@ const deleteBoard = (request, response) => {
 
 const goToBoard = (request, response) => {
   const req = request;
-  const ID = req.body._id;
+  const res = response;
 
-  Ticket.getTickets(request, response, ID);
+  const ID = req.body._id;
+  res.json({ redirect: `/tickets?id=${ID}` });
 };
 
 module.exports.getBoards = getBoards;

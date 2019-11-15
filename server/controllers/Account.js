@@ -9,6 +9,11 @@ const signupPage = (req, res) => {
   res.render('signup', { csrfToken: req.csrfToken() });
 };
 
+const changePassPage = (req, res) => {
+  console.log('test');
+  res.render('changePass', { csrfToken: req.csrfToken() });
+};
+
 const logout = (req, res) => {
   req.session.destroy();
   res.redirect('/');
@@ -64,7 +69,7 @@ const signup = (request, response) => {
     const savePromise = newAccount.save();
     savePromise.then(() => {
       req.session.account = Account.AccountModel.toAPI(newAccount);
-      return res.json({ redirect: '/tickets' });
+      return res.json({ redirect: '/boards' });
     });
     savePromise.catch((err) => {
       console.log(err);
@@ -78,8 +83,49 @@ const signup = (request, response) => {
   });
 };
 
+const changePassword = (request, response) => {
+  const req = request;
+  const res = response;
+
+  // cast strings for security
+  req.body.oldPass = `${req.body.oldPass}`;
+  req.body.newPass = `${req.body.newPass}`;
+  req.body.newPass2 = `${req.body.newPass2}`;
+
+  if (!req.body.oldPass || !req.body.newPass || !req.body.newPass2) {
+    return res.status(400).json({ error: 'RAWR! All fields are required' });
+  }
+  if (req.body.newPass !== req.newPass2.pass2) {
+    return res.status(400).json({ error: 'RAWR! Passwords do not match' });
+  }
+
+  return Account.AccountModel.changePassword(req.session.account.username, req.body.oldPass, req.body.newPass, (err, doc) => {
+    if (err) {
+      return res.status(401).json({ error: 'Wrong password' });
+    }
+    if (!doc) {
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    return Account.AccountModel.generateHash(req.body.newPass, (salt, hash) => {
+      const accountData = {
+        username: req.session.account.username,
+        salt,
+        password: hash,
+      };
+
+
+    });
+
+    return res.json({ redirect: '/changepass' });
+  });
+};
+
 module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signupPage = signupPage;
 module.exports.signup = signup;
+module.exports.changePassPage = changePassPage;
+module.exports.changePassword = changePassword;
+

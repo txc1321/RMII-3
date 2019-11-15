@@ -1,0 +1,34 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Co-Lab</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <link rel="shortcut icon" href="/assets/img/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<nav><a href="/login"><img id="logo" class="logo" src="/assets/img/logo.png" alt="logo"/></a>
+    <button class="btn btn-primary navlink"><a href="/logout">Log out</a></button>
+    <button class="btn btn-primary navlink"><a href="/boards">Boards</a></button>
+</nav>
+<section id="changePassword">
+    <form id="changePasswordForm" name="changePasswordForm" action="/changePassword" method="POST" class="mainForm">
+        <label for="oldPass">Old Password: </label>
+        <input id="oldPass" type="password" name="oldPass" placeholder="Old Password"/>
+        <label for="newPass">New Password: </label>
+        <input id="newPass" type="password" name="newPass" placeholder="New Password"/>
+        <label for="newPass2">Retype New Password: </label>
+        <input id="newPass2" type="password" name="newPass2" placeholder="Retype New Password"/>
+        <input type="hidden" name="_csrf" value={{csrfToken}} />
+        <input class="formSubmit" type="submit" value="Change Password" />
+    </form>
+</section>
+<div id="domoMessage"><img id="speech" src="/assets/img/speech.png" alt="speech box"/>
+    <h3><span id="errorMessage">Wrong username or password</span></h3><img id="domo" src="assets/img/domo.png" alt="domo"/>
+</div>
+<script src="/assets/bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

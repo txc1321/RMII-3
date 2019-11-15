@@ -69,13 +69,13 @@ app.engine('handlebars', expressHandlebars({ defaultLayout: 'main',
         "-": Ivalue - Rvalue,
         "*": Ivalue * Rvalue,
         "/": Ivalue / Rvalue,
-        "%": Ivalue % Rvalue
+        "%": Ivalue % Rvalue,
       }[operator];
     },
-    boardNav: function(){
-      return ;
-    }
-  }
+    concat: function(str1, str2){
+      return str1 + str2;
+    },
+  },
 }));
 app.set('view engine', 'handlebars');
 app.set('views', `${__dirname}/../views`);

@@ -12,10 +12,10 @@ var sendAjax = function sendAjax(type, action, data) {
     data: data,
     dataType: 'json',
     success: function success(result, status, xhr) {
-
       window.location = result.redirect;
     },
     error: function error(xhr, status, _error) {
+      console.log(xhr.responseText);
       var messageObj = JSON.parse(xhr.responseText);
 
       handleError(messageObj.error);
@@ -81,16 +81,72 @@ $(document).ready(function () {
     return false;
   });
 
-  $('#boardDeleteForm').on('submit', function (e) {
+  $('#boardNavForm0').on('submit', function (e) {
     e.preventDefault();
-    sendAjax($('#boardDeleteForm').attr('method'), $('#boardDeleteForm').attr('action'), $('#boardDeleteForm').serialize());
+    sendAjax($('#boardNavForm0').attr('method'), $('#boardNavForm0').attr('action'), $('#boardNavForm0').serialize());
 
     return false;
   });
 
-  $('#boardNavigateForm').on('submit', function (e) {
+  $('#boardNavForm1').on('submit', function (e) {
     e.preventDefault();
-    sendAjax($('#boardNavigateForm').attr('method'), $('#boardNavigateForm').attr('action'), $('#boardNavigateForm').serialize());
+    sendAjax($('#boardNavForm1').attr('method'), $('#boardNavForm1').attr('action'), $('#boardNavForm1').serialize());
+
+    return false;
+  });
+
+  $('#boardNavForm2').on('submit', function (e) {
+    e.preventDefault();
+    sendAjax($('#boardNavForm2').attr('method'), $('#boardNavForm2').attr('action'), $('#boardNavForm2').serialize());
+
+    return false;
+  });
+
+  $('#boardNavForm3').on('submit', function (e) {
+    e.preventDefault();
+    sendAjax($('#boardNavForm3').attr('method'), $('#boardNavForm3').attr('action'), $('#boardNavForm3').serialize());
+
+    return false;
+  });
+
+  $('#boardNavForm4').on('submit', function (e) {
+    e.preventDefault();
+    sendAjax($('#boardNavForm4').attr('method'), $('#boardNavForm4').attr('action'), $('#boardNavForm4').serialize());
+
+    return false;
+  });
+
+  $('#boardDeleteForm0').on('submit', function (e) {
+    e.preventDefault();
+    sendAjax($('#boardDeleteForm0').attr('method'), $('#boardDeleteForm0').attr('action'), $('#boardDeleteForm0').serialize());
+
+    return false;
+  });
+
+  $('#boardDeleteForm1').on('submit', function (e) {
+    e.preventDefault();
+    sendAjax($('#boardDeleteForm1').attr('method'), $('#boardDeleteForm1').attr('action'), $('#boardDeleteForm1').serialize());
+
+    return false;
+  });
+
+  $('#boardDeleteForm2').on('submit', function (e) {
+    e.preventDefault();
+    sendAjax($('#boardDeleteForm2').attr('method'), $('#boardDeleteForm2').attr('action'), $('#boardDeleteForm2').serialize());
+
+    return false;
+  });
+
+  $('#boardDeleteForm3').on('submit', function (e) {
+    e.preventDefault();
+    sendAjax($('#boardDeleteForm3').attr('method'), $('#boardDeleteForm3').attr('action'), $('#boardDeleteForm3').serialize());
+
+    return false;
+  });
+
+  $('#boardDeleteForm4').on('submit', function (e) {
+    e.preventDefault();
+    sendAjax($('#boardDeleteForm4').attr('method'), $('#boardDeleteForm4').attr('action'), $('#boardDeleteForm4').serialize());
 
     return false;
   });

@@ -1,7 +1,8 @@
 const models = require('../models');
 const Ticket = models.Ticket;
 
-const groupTickets = (req, res, boardID) => {
+const groupTickets = (req, res) => {
+  const boardID = req.query.id;
   let allTickets = [];
   const ticketsPromise = Ticket.TicketModel.findByOwnerandBoard(req.session.account._id, boardID,
     (err, docs) => {
@@ -62,7 +63,7 @@ const makeTicket = (req, res) => {
   const newTicket = new Ticket.TicketModel(TicketData);
 
   const ticketPromise = newTicket.save();
-  ticketPromise.then(() => res.json({ redirect: '/tickets' }));
+  ticketPromise.then(() => res.json({ redirect: `/tickets?id=${req.query.id}` }));
   ticketPromise.catch((err) => {
     console.log(err);
     if (err.code === 11000) {
@@ -86,7 +87,7 @@ const resolveTicket = (request, response) => {
 
     return false;
   });
-  ticketPromise.then(() => res.json({ redirect: '/tickets' }));
+  ticketPromise.then(() => res.json({ redirect: `/tickets?id=${req.query.id}` }));
   ticketPromise.catch((err) => {
     console.log(err);
 
