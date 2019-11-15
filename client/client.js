@@ -21,7 +21,25 @@ const sendAjax = (type, action, data) => {
   });
 };
 
+const setSubmit = (uID) => {
+  $(uID).on('submit', (e) => {
+    e.preventDefault();
+    sendAjax($(uID).attr('method'), $(uID).attr('action'), $(uID).serialize());
+
+    return false;
+  });
+};
+
+
 $(document).ready(() => {
+  for(let i = 0; i < 5; i++){
+    setSubmit("#boardNavForm" + i);
+    setSubmit("#boardDeleteForm" + i);
+  }
+  for(let i = 0; i < 25; i++){
+    setSubmit("#ticketDeleteForm" + i);
+  }
+
   $('#signupForm').on('submit', (e) => {
     e.preventDefault();
 
@@ -82,41 +100,9 @@ $(document).ready(() => {
   });
 
 
-  $('#boardNavForm0').on('submit', (e) => {
+  /* $('#boardNavForm0').on('submit', (e) => {
     e.preventDefault();
     sendAjax($('#boardNavForm0').attr('method'), $('#boardNavForm0').attr('action'), $('#boardNavForm0').serialize());
-
-    return false;
-  });
-
-
-  $('#boardNavForm1').on('submit', (e) => {
-    e.preventDefault();
-    sendAjax($('#boardNavForm1').attr('method'), $('#boardNavForm1').attr('action'), $('#boardNavForm1').serialize());
-
-    return false;
-  });
-
-
-  $('#boardNavForm2').on('submit', (e) => {
-    e.preventDefault();
-    sendAjax($('#boardNavForm2').attr('method'), $('#boardNavForm2').attr('action'), $('#boardNavForm2').serialize());
-
-    return false;
-  });
-
-
-  $('#boardNavForm3').on('submit', (e) => {
-    e.preventDefault();
-    sendAjax($('#boardNavForm3').attr('method'), $('#boardNavForm3').attr('action'), $('#boardNavForm3').serialize());
-
-    return false;
-  });
-
-
-  $('#boardNavForm4').on('submit', (e) => {
-    e.preventDefault();
-    sendAjax($('#boardNavForm4').attr('method'), $('#boardNavForm4').attr('action'), $('#boardNavForm4').serialize());
 
     return false;
   });
@@ -128,68 +114,10 @@ $(document).ready(() => {
     return false;
   });
 
-  $('#boardDeleteForm1').on('submit', (e) => {
-    e.preventDefault();
-    sendAjax($('#boardDeleteForm1').attr('method'), $('#boardDeleteForm1').attr('action'), $('#boardDeleteForm1').serialize());
-
-    return false;
-  });
-
-  $('#boardDeleteForm2').on('submit', (e) => {
-    e.preventDefault();
-    sendAjax($('#boardDeleteForm2').attr('method'), $('#boardDeleteForm2').attr('action'), $('#boardDeleteForm2').serialize());
-
-    return false;
-  });
-
-  $('#boardDeleteForm3').on('submit', (e) => {
-    e.preventDefault();
-    sendAjax($('#boardDeleteForm3').attr('method'), $('#boardDeleteForm3').attr('action'), $('#boardDeleteForm3').serialize());
-
-    return false;
-  });
-
-
-  $('#boardDeleteForm4').on('submit', (e) => {
-    e.preventDefault();
-    sendAjax($('#boardDeleteForm4').attr('method'), $('#boardDeleteForm4').attr('action'), $('#boardDeleteForm4').serialize());
-
-    return false;
-  });
-
   $('#ticketDeleteForm0').on('submit', (e) => {
     e.preventDefault();
     sendAjax($('#ticketDeleteForm0').attr('method'), $('#ticketDeleteForm0').attr('action'), $('#ticketDeleteForm0').serialize());
 
     return false;
-  });
-
-  $('#ticketDeleteForm1').on('submit', (e) => {
-    e.preventDefault();
-    sendAjax($('#ticketDeleteForm1').attr('method'), $('#ticketDeleteForm1').attr('action'), $('#ticketDeleteForm1').serialize());
-
-    return false;
-  });
-
-  $('#ticketDeleteForm2').on('submit', (e) => {
-    e.preventDefault();
-    sendAjax($('#ticketDeleteForm2').attr('method'), $('#ticketDeleteForm2').attr('action'), $('#ticketDeleteForm2').serialize());
-
-    return false;
-  });
-
-  $('#ticketDeleteForm3').on('submit', (e) => {
-    e.preventDefault();
-    sendAjax($('#ticketDeleteForm3').attr('method'), $('#ticketDeleteForm3').attr('action'), $('#ticketDeleteForm3').serialize());
-
-    return false;
-  });
-
-  $('#ticketDeleteForm4').on('submit', (e) => {
-    e.preventDefault();
-    sendAjax($('#ticketDeleteForm4').attr('method'), $('#ticketDeleteForm4').attr('action'), $('#ticketDeleteForm4').serialize());
-
-    return false;
-  });
-
+  }); */
 });
