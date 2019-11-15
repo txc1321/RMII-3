@@ -60,19 +60,19 @@ app.use(session({
   },
 }));
 app.engine('handlebars', expressHandlebars({ defaultLayout: 'main',
-  helpers:{
-    math: function(Ivalue, operator, Rvalue){
-      Ivalue = parseFloat(Ivalue);
-      Rvalue = parseFloat(Rvalue);
-      return{
-        "+": Ivalue + Rvalue,
-        "-": Ivalue - Rvalue,
-        "*": Ivalue * Rvalue,
-        "/": Ivalue / Rvalue,
-        "%": Ivalue % Rvalue,
+  helpers: {
+    math(Ivalue, operator, Rvalue) {
+      const newIvalue = parseFloat(Ivalue);
+      const newRvalue = parseFloat(Rvalue);
+      return {
+        '+': newIvalue + newRvalue,
+        '-': newIvalue - newRvalue,
+        '*': newIvalue * newRvalue,
+        '/': newIvalue / newRvalue,
+        '%': newIvalue % newRvalue,
       }[operator];
     },
-    concat: function(str1, str2){
+    concat(str1, str2) {
       return str1 + str2;
     },
   },

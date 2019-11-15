@@ -92,6 +92,9 @@ const changePassword = (request, response) => {
   req.body.newPass = `${req.body.newPass}`;
   req.body.newPass2 = `${req.body.newPass2}`;
 
+  const oldPass = req.body.oldPass;
+  const newPass = req.body.newPass;
+
   if (!req.body.oldPass || !req.body.newPass || !req.body.newPass2) {
     return res.status(400).json({ error: 'RAWR! All fields are required' });
   }
@@ -99,26 +102,25 @@ const changePassword = (request, response) => {
     return res.status(400).json({ error: 'RAWR! Passwords do not match' });
   }
 
-  return Account.AccountModel.changePassword(req.session.account.username, req.body.oldPass, req.body.newPass, (err, doc) => {
-    if (err) {
-      return res.status(401).json({ error: 'Wrong password' });
-    }
-    if (!doc) {
-      return res.status(400).json({ error: 'An error occurred' });
-    }
+  return Account.AccountModel.changePassword(req.session.account.username, oldPass, newPass,
+      (err, doc) => {
+        if (err) {
+          return res.status(401).json({ error: 'Wrong password' });
+        }
+        if (!doc) {
+          return res.status(400).json({ error: 'An error occurred' });
+        }
 
-    return Account.AccountModel.generateHash(req.body.newPass, (salt, hash) => {
-      const accountData = {
-        username: req.session.account.username,
-        salt,
-        password: hash,
-      };
+        return Account.AccountModel.generateHash(req.body.newPass, (salt, hash) => {
+          const accountData = {
+            username: req.session.account.username,
+            salt,
+            password: hash,
+          };
+        });
 
-
-    });
-
-    return res.json({ redirect: '/changepass' });
-  });
+        return res.json({ redirect: '/changepass' });
+      });
 };
 
 module.exports.loginPage = loginPage;

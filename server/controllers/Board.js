@@ -1,7 +1,5 @@
 const models = require('../models');
-const controllers = require('../controllers');
 const Board = models.Board;
-const Ticket = controllers.Ticket;
 
 const getBoards = (req, res) => {
   Board.BoardModel.findByOwner(req.session.account._id, (err, docs) => {
@@ -50,8 +48,6 @@ const makeBoard = (req, res) => {
 const deleteBoard = (request, response) => {
   const req = request;
   const res = response;
-
-  console.log(req.body._id);
 
   const boardPromise = Board.BoardModel.deleteOne({ _id: req.body._id }, (err) => {
     if (err) {

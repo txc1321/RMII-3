@@ -36,7 +36,7 @@ const groupTickets = (req, res) => {
     for (let i = 5; i > 0; i--) {
       priorityTickets.tickets.push(sortStruct.tickets[i - 1]);
     }
-    return res.render('app', { csrfToken: req.csrfToken(), priorities: priorityTickets, boardID: boardID });
+    return res.render('app', { csrfToken: req.csrfToken(), priorities: priorityTickets, boardID });
   });
 };
 
@@ -58,8 +58,6 @@ const makeTicket = (req, res) => {
     owner: req.session.account._id,
   };
 
-  console.log(TicketData);
-
   const newTicket = new Ticket.TicketModel(TicketData);
 
   const ticketPromise = newTicket.save();
@@ -79,8 +77,6 @@ const makeTicket = (req, res) => {
 const resolveTicket = (request, response) => {
   const req = request;
   const res = response;
-
-  console.log(req.body._boardID);
 
   const ticketPromise = Ticket.TicketModel.deleteOne({ _id: req.body._id }, (err) => {
     if (err) {

@@ -11,7 +11,10 @@ const router = (app) => {
   app.post('/boardNav', mid.requiresLogin, controllers.Board.goToBoard);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
-  app.post('/changePassword', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassword);
+  app.post('/changePassword',
+      mid.requiresSecure,
+      mid.requiresLogin,
+      controllers.Account.changePassword);
   app.post('/makeTicket', mid.requiresLogin, controllers.Ticket.makeTicket);
   app.post('/makeBoard', mid.requiresLogin, controllers.Board.makeBoard);
   app.delete('/resolveTicket', mid.requiresLogin, controllers.Ticket.resolveTicket);
