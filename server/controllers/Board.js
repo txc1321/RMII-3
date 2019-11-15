@@ -1,5 +1,7 @@
 const models = require('../models');
+const controllers = require('../controllers');
 const Board = models.Board;
+const Ticket = controllers.Ticket;
 
 const getBoards = (req, res) => {
   Board.BoardModel.findByOwner(req.session.account._id, (err, docs) => {
@@ -49,6 +51,8 @@ const deleteBoard = (request, response) => {
   const req = request;
   const res = response;
 
+  Ticket.deleteBoardTickets(req, res);
+
   const boardPromise = Board.BoardModel.deleteOne({ _id: req.body._id }, (err) => {
     if (err) {
       return res.status(400).json({ error: 'An error occurred' });
@@ -56,7 +60,10 @@ const deleteBoard = (request, response) => {
 
     return false;
   });
-  boardPromise.then(() => res.json({ redirect: '/boards' }));
+  boardPromise.then(() => { 
+    res.json({ redirect: '/boards' });
+    
+  });
   boardPromise.catch((err) => {
     console.log(err);
 

@@ -98,26 +98,4 @@ $(document).ready(() => {
 
     return false;
   });
-
-
-  /* $('#boardNavForm0').on('submit', (e) => {
-    e.preventDefault();
-    sendAjax($('#boardNavForm0').attr('method'), $('#boardNavForm0').attr('action'), $('#boardNavForm0').serialize());
-
-    return false;
-  });
-
-  $('#boardDeleteForm0').on('submit', (e) => {
-    e.preventDefault();
-    sendAjax($('#boardDeleteForm0').attr('method'), $('#boardDeleteForm0').attr('action'), $('#boardDeleteForm0').serialize());
-
-    return false;
-  });
-
-  $('#ticketDeleteForm0').on('submit', (e) => {
-    e.preventDefault();
-    sendAjax($('#ticketDeleteForm0').attr('method'), $('#ticketDeleteForm0').attr('action'), $('#ticketDeleteForm0').serialize());
-
-    return false;
-  }); */
 });

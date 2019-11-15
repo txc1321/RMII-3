@@ -95,6 +95,30 @@ const resolveTicket = (request, response) => {
   return ticketPromise;
 };
 
+const deleteBoardTickets = (request, response) => {
+  const req = request;
+  const res = response;
+
+  const ticketsPromise = Ticket.TicketModel.deleteMany({ boardID: req.body._id }, (err) => {
+    if (err) {
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    return false;
+  });
+  ticketsPromise.then(() => {
+    console.log("Tickets deleted");
+  });
+  ticketsPromise.catch((err) => {
+    console.log(err);
+
+    return res.status(400).json({ error: 'An error has occured' });
+  });
+
+  return ticketsPromise;
+}
+
 module.exports.getTickets = getTickets;
 module.exports.makeTicket = makeTicket;
 module.exports.resolveTicket = resolveTicket;
+module.exports.deleteBoardTickets = deleteBoardTickets;
