@@ -63,7 +63,7 @@ const makeTicket = (req, res) => {
   const newTicket = new Ticket.TicketModel(TicketData);
 
   const ticketPromise = newTicket.save();
-  ticketPromise.then(() => res.json({ redirect: `/tickets?id=${req.query.id}` }));
+  ticketPromise.then(() => res.json({ redirect: `/tickets?id=${req.body.boardID}` }));
   ticketPromise.catch((err) => {
     console.log(err);
     if (err.code === 11000) {
@@ -80,14 +80,16 @@ const resolveTicket = (request, response) => {
   const req = request;
   const res = response;
 
-  const ticketPromise = Ticket.TicketModel.deleteOne({ id: req.body._id }, (err) => {
+  console.log(req.body._boardID);
+
+  const ticketPromise = Ticket.TicketModel.deleteOne({ _id: req.body._id }, (err) => {
     if (err) {
       return res.status(400).json({ error: 'An error occurred' });
     }
 
     return false;
   });
-  ticketPromise.then(() => res.json({ redirect: `/tickets?id=${req.query.id}` }));
+  ticketPromise.then(() => res.json({ redirect: `/tickets?id=${req.body._boardID}` }));
   ticketPromise.catch((err) => {
     console.log(err);
 

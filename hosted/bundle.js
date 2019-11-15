@@ -150,4 +150,39 @@ $(document).ready(function () {
 
     return false;
   });
+
+  $('#ticketDeleteForm0').on('submit', function (e) {
+    e.preventDefault();
+    sendAjax($('#ticketDeleteForm0').attr('method'), $('#ticketDeleteForm0').attr('action'), $('#ticketDeleteForm0').serialize());
+
+    return false;
+  });
+
+  $('#ticketDeleteForm1').on('submit', function (e) {
+    e.preventDefault();
+    sendAjax($('#ticketDeleteForm1').attr('method'), $('#ticketDeleteForm1').attr('action'), $('#ticketDeleteForm1').serialize());
+
+    return false;
+  });
+
+  $('#ticketDeleteForm2').on('submit', function (e) {
+    e.preventDefault();
+    sendAjax($('#ticketDeleteForm2').attr('method'), $('#ticketDeleteForm2').attr('action'), $('#ticketDeleteForm2').serialize());
+
+    return false;
+  });
+
+  $('#ticketDeleteForm3').on('submit', function (e) {
+    e.preventDefault();
+    sendAjax($('#ticketDeleteForm3').attr('method'), $('#ticketDeleteForm3').attr('action'), $('#ticketDeleteForm3').serialize());
+
+    return false;
+  });
+
+  $('#ticketDeleteForm4').on('submit', function (e) {
+    e.preventDefault();
+    sendAjax($('#ticketDeleteForm4').attr('method'), $('#ticketDeleteForm4').attr('action'), $('#ticketDeleteForm4').serialize());
+
+    return false;
+  });
 });

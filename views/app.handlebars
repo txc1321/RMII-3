@@ -17,7 +17,7 @@
       {{#if priorities.tickets}}
           {{#each priorities.tickets}}
             <div class="ticketContainer">
-                <h3>Priority: {{math @index "+" 1}}</h3>
+                <h3>Priority: {{math 5 "-" @index}}</h3>
                 <div class="btn-group btn-group-toggle sortButtons" data-toggle="buttons">
                   <label class="btn btn-primary active">
                     <input type="radio" name="options" id="option1" autocomplete="off" checked> Date Created
@@ -34,7 +34,12 @@
                                     <h3 class="ticketPriority">Priority: {{this.priority}}</h3>
                                     <h3 class="ticketDueDate">Due Date: {{this.dueDate}}</h3>
                                     <h3 class="ticketDesc">Description: {{this.description}}</h3>
-                                    <button class="deleteButton">X</button>
+                                    <form id={{concat "ticketDeleteForm" @index}} name={{concat "ticketDeleteForm" @index}} action="/resolveTicket" method="delete" class="ticketDeleteForm">
+                                        <input type="hidden" name="_csrf" value={{../../csrfToken}} />
+                                        <input type="hidden" name="_id" value={{this.id}} />
+                                        <input type="hidden" name="_boardID" value={{../../boardID}} />
+                                        <input class="deleteTicketSubmit btn btn-primary" type="submit" value="X"/>
+                                    </form>
                                 </div>
                             {{/each}}
                     </div>
