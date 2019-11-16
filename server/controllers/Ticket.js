@@ -1,5 +1,6 @@
 const models = require('../models');
 const Ticket = models.Ticket;
+const Board = models.Board;
 
 const groupTickets = (req, res) => {
   const boardID = req.query.id;
@@ -46,7 +47,7 @@ const getTickets = (req, res, ID) => {
 
 const makeTicket = (req, res) => {
   if (!req.body.title || !req.body.priority || !req.body.dueDate) {
-    return res.status(400).json({ error: 'are required' });
+    return res.status(400).json({ error: 'Title, Priority, and Due Date are all required' });
   }
 
   const TicketData = {
@@ -61,14 +62,38 @@ const makeTicket = (req, res) => {
   const newTicket = new Ticket.TicketModel(TicketData);
 
   const ticketPromise = newTicket.save();
-  ticketPromise.then(() => res.json({ redirect: `/tickets?id=${req.body.boardID}` }));
+  ticketPromise.then(() => {
+    const search = { _id: req.body.boardID };
+    const boardPromise = Board.BoardModel.findOne(search, (err, docs) => {
+      if (err) {
+        return res.status(400).json({ error: 'An error occurred' });
+      }
+      const newTickets = [];
+      newTickets.push(ticketPromise);
+      const allTickets = docs.tickets.concat(newTickets);
+      docs.tickets.splice(0, docs.tickets.length, ...allTickets);
+      docs.save();
+
+      return false;
+    });
+    boardPromise.then(() => {
+      console.log(ticketPromise);
+    });
+    boardPromise.catch((err) => {
+      console.log(err);
+
+      return res.status(400).json({ error: 'An error occurred' });
+    });
+
+    res.json({ redirect: `/tickets?id=${req.body.boardID}` });
+  });
   ticketPromise.catch((err) => {
     console.log(err);
     if (err.code === 11000) {
       return res.status(400).json({ error: 'Ticket already exists' });
     }
 
-    return res.status(400).json({ error: 'An error has occurred' });
+    return res.status(400).json({ error: 'An error occurred' });
   });
 
   return ticketPromise;
@@ -89,7 +114,7 @@ const resolveTicket = (request, response) => {
   ticketPromise.catch((err) => {
     console.log(err);
 
-    return res.status(400).json({ error: 'An error has occured' });
+    return res.status(400).json({ error: 'An error occurred' });
   });
 
   return ticketPromise;
@@ -99,6 +124,8 @@ const deleteBoardTickets = (request, response) => {
   const req = request;
   const res = response;
 
+  console.log(req.body._id);
+
   const ticketsPromise = Ticket.TicketModel.deleteMany({ boardID: req.body._id }, (err) => {
     if (err) {
       return res.status(400).json({ error: 'An error occurred' });
@@ -107,16 +134,16 @@ const deleteBoardTickets = (request, response) => {
     return false;
   });
   ticketsPromise.then(() => {
-    console.log("Tickets deleted");
+    console.log('Tickets deleted');
   });
   ticketsPromise.catch((err) => {
     console.log(err);
 
-    return res.status(400).json({ error: 'An error has occured' });
+    return res.status(400).json({ error: 'An error occurred' });
   });
 
   return ticketsPromise;
-}
+};
 
 module.exports.getTickets = getTickets;
 module.exports.makeTicket = makeTicket;

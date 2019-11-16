@@ -1,7 +1,6 @@
 const models = require('../models');
-const controllers = require('../controllers');
 const Board = models.Board;
-const Ticket = controllers.Ticket;
+const Ticket = models.Ticket;
 
 const getBoards = (req, res) => {
   Board.BoardModel.findByOwner(req.session.account._id, (err, docs) => {
@@ -18,11 +17,11 @@ const getBoards = (req, res) => {
 
 const makeBoard = (req, res) => {
   if (!req.body.name) {
-    return res.status(400).json({ error: 'are required' });
+    return res.status(400).json({ error: 'Name is required' });
   }
 
   if (req.body.boardCount >= 5) {
-    return res.status(400).json({ error: 'Maximum boards reached' });
+    return res.status(400).json({ error: 'Maximum number of boards reached' });
   }
 
   const BoardData = {
@@ -51,23 +50,34 @@ const deleteBoard = (request, response) => {
   const req = request;
   const res = response;
 
-  Ticket.deleteBoardTickets(req, res);
-
+  // Ticket.deleteBoardTickets(req, res);
   const boardPromise = Board.BoardModel.deleteOne({ _id: req.body._id }, (err) => {
     if (err) {
       return res.status(400).json({ error: 'An error occurred' });
     }
-
     return false;
   });
-  boardPromise.then(() => { 
+  boardPromise.then(() => {
+    const ticketPromise = Ticket.TicketModel.deleteMany({ boardID: req.body._id }, (err) => {
+      if (err) {
+        return res.status(400).json({ error: 'An error occurred' });
+      }
+
+      return false;
+    });
+    ticketPromise.then(() => false);
+    ticketPromise.catch((err) => {
+      console.log(err);
+
+      return res.status(400).json({ error: 'An error occurred' });
+    });
+
     res.json({ redirect: '/boards' });
-    
   });
   boardPromise.catch((err) => {
     console.log(err);
 
-    return res.status(400).json({ error: 'An error has occured' });
+    return res.status(400).json({ error: 'An error has occurred' });
   });
 
   return boardPromise;
