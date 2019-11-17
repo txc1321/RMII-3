@@ -6,7 +6,7 @@ const convertID = mongoose.Types.ObjectId;
 const setName = (name) => _.escape(name).trim();
 
 let BoardModel = {};
-
+// define schema
 const BoardSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -27,12 +27,13 @@ const BoardSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-
+// send board data to API
 BoardSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   tickets: doc.tickets,
 });
 
+// find board by owner ID
 BoardSchema.statics.findByOwner = (ownerID, callback) => {
   const search = {
     owner: convertID(ownerID),

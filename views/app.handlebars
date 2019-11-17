@@ -16,24 +16,19 @@
   <section id="tickets">
       {{#if priorities.tickets}}
           {{#each priorities.tickets}}
+            <!-- Priority column container -->
             <div class="ticketContainer">
                 <h3>Priority: {{math 5 "-" @index}}</h3>
-                <div class="btn-group btn-group-toggle sortButtons" data-toggle="buttons">
-                  <label class="btn btn-primary active">
-                    <input type="radio" name="options" id="option1" autocomplete="off" checked> Date Created
-                  </label>
-                  <label class="btn btn-primary">
-                    <input type="radio" name="options" id="option2" autocomplete="off"> Date Due
-                  </label>
-                </div>
                 {{#if this}}
                     <div class="tickets">
                             {{#each this}}
+                                <!-- Ticket container -->
                                 <div class="ticket">
                                     <h3 class="ticketTitle">Title: {{this.title}}</h3>
                                     <h3 class="ticketPriority">Priority: {{this.priority}}</h3>
                                     <h3 class="ticketDueDate">Due Date: {{this.dueDate}}</h3>
                                     <h3 class="ticketDesc">Description: {{this.description}}</h3>
+                                    <!-- Creates a form to delete each ticket, id generated from index -->
                                     <form id={{concat "ticketDeleteForm" @index}} name={{concat "ticketDeleteForm" @index}} action="/resolveTicket" method="delete" class="ticketDeleteForm">
                                         <input type="hidden" name="_csrf" value={{../../csrfToken}} />
                                         <input type="hidden" name="_id" value={{this.id}} />

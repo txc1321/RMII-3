@@ -52,7 +52,7 @@ app.use(session({
     port: redisURL.port,
     pass: redisPASS,
   }),
-  secret: 'Domo Arigato',
+  secret: 'CoLab',
   resave: 'true',
   saveUninitialized: true,
   cookie: {
@@ -61,6 +61,7 @@ app.use(session({
 }));
 app.engine('handlebars', expressHandlebars({ defaultLayout: 'main',
   helpers: {
+    // handlebar helper to do basic math ops in view
     math(Ivalue, operator, Rvalue) {
       const newIvalue = parseFloat(Ivalue);
       const newRvalue = parseFloat(Rvalue);
@@ -72,6 +73,7 @@ app.engine('handlebars', expressHandlebars({ defaultLayout: 'main',
         '%': newIvalue % newRvalue,
       }[operator];
     },
+    // handlebar helper to concat two strings in view
     concat(str1, str2) {
       return str1 + str2;
     },

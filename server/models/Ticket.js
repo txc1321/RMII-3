@@ -6,7 +6,7 @@ const convertID = mongoose.Types.ObjectId;
 const setTitle = (title) => _.escape(title).trim();
 
 let TicketModel = {};
-
+// define schema
 const TicketSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -44,7 +44,7 @@ const TicketSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-
+// send ticket data to API
 TicketSchema.statics.toAPI = (doc) => ({
   title: doc.title,
   priority: doc.priority,
@@ -53,6 +53,7 @@ TicketSchema.statics.toAPI = (doc) => ({
   boardID: doc.boardID,
 });
 
+// find ticket by owner and board data
 TicketSchema.statics.findByOwnerandBoard = (ownerID, boardID, callback) => {
   const search = {
     owner: convertID(ownerID),

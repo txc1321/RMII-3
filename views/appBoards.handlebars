@@ -15,7 +15,9 @@
 
 <section id="boards">
     {{#if boards}}
+        <!-- Boards container -->
         <div class="remainingBoards">
+            <!-- Boards remaining in plan -->
             <h3 class="boardsLeft">Free Boards Remaining: {{math 5 "-" count}}</h3>
             <div class="premium row">
                 <h6 class="premiumCTA">Want to upgrade?</h6>
@@ -23,6 +25,7 @@
             </div>
         </div>
         {{#each boards}}
+            <!-- Board container -->
             <div class="board">
                 <div class="row">
                     <h4 class="boardLabel">Name: {{this.name}}</h4>
@@ -33,6 +36,7 @@
                             <h4 class="boardLabel">Tickets: None</h4>
                         {{/if}}
                     </div>
+                    <!-- Creates navigate and delete forms from index for each board -->
                     <form id={{concat "boardNavForm" @index}} name={{concat "boardNavForm" @index}} action="/boardNav" method="POST" class="boardNavForm">
                         <input type="hidden" name="_csrf" value={{../csrfToken}} />
                         <input type="hidden" name="_id" value={{this.id}} />

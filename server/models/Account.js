@@ -7,7 +7,7 @@ let AccountModel = {};
 const iterations = 10000;
 const saltLength = 64;
 const keyLength = 64;
-
+// define schema
 const AccountSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -29,13 +29,14 @@ const AccountSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-
+// send model data to API
 AccountSchema.statics.toAPI = doc => ({
   // _id is built into your mongo document and is guaranteed to be unique
   username: doc.username,
   _id: doc._id,
 });
 
+// check for password validation function
 const validatePassword = (doc, password, callback) => {
   const pass = doc.password;
 
@@ -47,6 +48,7 @@ const validatePassword = (doc, password, callback) => {
   });
 };
 
+// find account by username
 AccountSchema.statics.findByUsername = (name, callback) => {
   const search = {
     username: name,
@@ -55,6 +57,7 @@ AccountSchema.statics.findByUsername = (name, callback) => {
   return AccountModel.findOne(search, callback);
 };
 
+// generate hash for password
 AccountSchema.statics.generateHash = (password, callback) => {
   const salt = crypto.randomBytes(saltLength);
 
@@ -63,6 +66,7 @@ AccountSchema.statics.generateHash = (password, callback) => {
   );
 };
 
+// authenticate login info
 AccountSchema.statics.authenticate = (username, password, callback) =>
 AccountModel.findByUsername(username, (err, doc) => {
   if (err) {
@@ -82,6 +86,7 @@ AccountModel.findByUsername(username, (err, doc) => {
   });
 });
 
+// function to change password
 AccountSchema.statics.changePassword = (username, oldPass, newPass, callback) => {
   AccountModel.authenticate(username, oldPass, (err, doc) => {
     if (err) {
