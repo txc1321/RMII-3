@@ -91,7 +91,12 @@ const goToBoard = (request, response) => {
   res.json({ redirect: `/tickets?id=${ID}` });
 };
 
+const getUpgrade = (req, res) => {
+  res.render('upgrade', { csrfToken: req.csrfToken() });
+};
+
 module.exports.getBoards = getBoards;
 module.exports.makeBoard = makeBoard;
 module.exports.deleteBoard = deleteBoard;
 module.exports.goToBoard = goToBoard;
+module.exports.getUpgrade = getUpgrade;

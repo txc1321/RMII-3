@@ -77,7 +77,7 @@ const makeTicket = (req, res) => {
       return false;
     });
     boardPromise.then(() => {
-      console.log(ticketPromise);
+      return false;
     });
     boardPromise.catch((err) => {
       console.log(err);
@@ -99,9 +99,58 @@ const makeTicket = (req, res) => {
   return ticketPromise;
 };
 
+const deleteTicketFromBoard = (request, response) => {
+  const req = request;
+  const res = response;
+
+  let thisTicketID;
+  let index;
+
+  const ticketPromise = Ticket.TicketModel.find({ _id: req.body._id }, (err, docs) => {
+    if (err) {
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    thisTicketID = docs._id;
+    return false;
+  });
+  ticketPromise.then(() => false);
+  ticketPromise.catch((err) => {
+    console.log(err);
+
+    return res.status(400).json({ error: 'An error occurred' });
+  });
+
+  const boardPromise = Board.BoardModel.findOne({ _id: req.body._boardID }, (err, docs) => {
+    if (err) {
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    for (let i = 0; i < docs.tickets.length; i++) {
+      if (docs.tickets[i]._id === thisTicketID) {
+        index = i;
+      }
+    }
+
+    docs.tickets.splice(index, 1);
+    docs.save();
+
+    return false;
+  });
+  boardPromise.then(() => false);
+  boardPromise.catch((err) => {
+    console.log(err);
+
+    return res.status(400).json({ error: 'An error occurred' });
+  });
+  return ticketPromise;
+};
+
 const resolveTicket = (request, response) => {
   const req = request;
   const res = response;
+
+  deleteTicketFromBoard(req, res);
 
   const ticketPromise = Ticket.TicketModel.deleteOne({ _id: req.body._id }, (err) => {
     if (err) {
@@ -110,7 +159,9 @@ const resolveTicket = (request, response) => {
 
     return false;
   });
-  ticketPromise.then(() => res.json({ redirect: `/tickets?id=${req.body._boardID}` }));
+  ticketPromise.then(() => {
+    res.json({ redirect: `/tickets?id=${req.body._boardID}` });
+  });
   ticketPromise.catch((err) => {
     console.log(err);
 
@@ -123,9 +174,6 @@ const resolveTicket = (request, response) => {
 const deleteBoardTickets = (request, response) => {
   const req = request;
   const res = response;
-
-  console.log(req.body._id);
-
   const ticketsPromise = Ticket.TicketModel.deleteMany({ boardID: req.body._id }, (err) => {
     if (err) {
       return res.status(400).json({ error: 'An error occurred' });
@@ -149,3 +197,4 @@ module.exports.getTickets = getTickets;
 module.exports.makeTicket = makeTicket;
 module.exports.resolveTicket = resolveTicket;
 module.exports.deleteBoardTickets = deleteBoardTickets;
+module.exports.deleteTicketFromBoard = deleteTicketFromBoard;

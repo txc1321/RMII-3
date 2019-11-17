@@ -1,5 +1,6 @@
 const handleError = (message) => {
   console.log(message);
+  $('#consoleMessage').html(message);
 };
 
 const sendAjax = (type, action, data) => {
@@ -32,24 +33,24 @@ const setSubmit = (uID) => {
 
 
 $(document).ready(() => {
-  for(let i = 0; i < 5; i++){
-    setSubmit("#boardNavForm" + i);
-    setSubmit("#boardDeleteForm" + i);
+  for (let i = 0; i < 5; i++) {
+    setSubmit('#boardNavForm' + i);
+    setSubmit('#boardDeleteForm' + i);
   }
-  for(let i = 0; i < 25; i++){
-    setSubmit("#ticketDeleteForm" + i);
+  for (let i = 0; i < 25; i++) {
+    setSubmit('#ticketDeleteForm' + i);
   }
 
   $('#signupForm').on('submit', (e) => {
     e.preventDefault();
 
     if ($('#user').val() === '' || $('#pass').val() === '' || $('#pass2').val() === '') {
-      handleError('RAWR! All fields are required');
+      handleError('All fields are required');
       return false;
     }
 
     if ($('#pass').val() !== $('#pass2').val()) {
-      handleError('RAWR! Passwords do not match');
+      handleError('Passwords do not match');
       return false;
     }
 
@@ -62,11 +63,32 @@ $(document).ready(() => {
     e.preventDefault();
 
     if ($('#user').val() === '' || $('#pass').val() === '') {
-      handleError('RAWR! Username or password is empty');
+      handleError('Username or password is empty');
       return false;
     }
 
     sendAjax($('#loginForm').attr('method'), $('#loginForm').attr('action'), $('#loginForm').serialize());
+
+    return false;
+  });
+
+  $('#changePasswordForm').on('submit', (e) => {
+    e.preventDefault();
+
+    if ($('#oldPass').val() === '' || $('#newPass').val() === '' || $('#newPass2').val() === '') {
+      handleError('All fields are required');
+      return false;
+    }
+    if ($('#newPass').val() !== $('#newPass2').val()) {
+      handleError('Passwords do not match');
+      return false;
+    }
+    if ($('#newPass').val() === $('#oldPass').val()) {
+      handleError('New password cannot be old password');
+      return false;
+    }
+
+    sendAjax($('#changePasswordForm').attr('method'), $('#changePasswordForm').attr('action'), $('#changePasswordForm').serialize());
 
     return false;
   });
@@ -77,7 +99,7 @@ $(document).ready(() => {
     if ($('#ticketTitle').val() === '' ||
         $('#ticketPriority').val() === '' ||
         $('#ticketDueDate').val() === '') {
-      handleError('RAWR! All fields are required');
+      handleError('Title, Priority, and Due Date are all required');
       return false;
     }
 
@@ -90,7 +112,7 @@ $(document).ready(() => {
     e.preventDefault();
 
     if ($('#boardName').val() === '') {
-      handleError('RAWR! All fields are required');
+      handleError('Name is required');
       return false;
     }
 

@@ -12,18 +12,17 @@
     <button class="btn btn-primary navlink"><a href="/logout">Log out</a></button>
     <button class="btn btn-primary navlink"><a href="/boards">Boards</a></button>
 </nav>
-<section id="changePassword">
-    <form id="changePasswordForm" name="changePasswordForm" action="/changePassword" method="POST" class="mainForm">
-        <label for="oldPass">Old Password: </label>
-        <input id="oldPass" type="password" name="oldPass" placeholder="Old Password"/>
-        <label for="newPass">New Password: </label>
-        <input id="newPass" type="password" name="newPass" placeholder="New Password"/>
-        <label for="newPass2">Retype New Password: </label>
-        <input id="newPass2" type="password" name="newPass2" placeholder="Retype New Password"/>
-        <input type="hidden" name="_csrf" value={{csrfToken}} />
-        <input class="formSubmit" type="submit" value="Change Password" />
-    </form>
+
+<section id="boards">
+    <div id="upgradeDesc">
+        <h3>Plans</h3>
+        <p>15 boards: $9.99/month</p><button class="btn btn-primary">Buy</button>
+        <p>30 boards: $14.99/month</p><button class="btn btn-primary">Buy</button>
+        <p>45 boards: $19.99/month</p><button class="btn btn-primary">Buy</button>
+        <p>60 boards: $24.99/month</p><button class="btn btn-primary">Buy</button>
+    </div>
 </section>
+
 <div id="consoleMessage">
     <h3><span id="errorMessage"></span></h3>
 </div>

@@ -103,11 +103,8 @@ const changePassword = (request, response) => {
 
   return Account.AccountModel.changePassword(req.session.account.username, oldPass, newPass,
       (err, doc) => {
-        if (err) {
+        if (err || !doc) {
           return res.status(401).json({ error: 'Incorrect password' });
-        }
-        if (!doc) {
-          return res.status(400).json({ error: 'An error occurred' });
         }
 
         return Account.AccountModel.generateHash(req.body.newPass, (salt, hash) => {

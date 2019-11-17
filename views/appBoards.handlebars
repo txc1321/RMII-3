@@ -19,7 +19,7 @@
             <h3 class="boardsLeft">Free Boards Remaining: {{math 5 "-" count}}</h3>
             <div class="premium row">
                 <h6 class="premiumCTA">Want to upgrade?</h6>
-                <button class="premiumButton btn btn-primary">Upgrade</button>
+                <button class="premiumButton btn btn-primary"><a href="/upgrade">Upgrade</a></button>
             </div>
         </div>
         {{#each boards}}
@@ -63,8 +63,8 @@
         </form>
     </div>
 </section>
-<div id="domoMessage"><img id="speech" src="/assets/img/speech.png" alt="speech box"/>
-    <h3><span id="errorMessage"></span></h3><img id="domo" src="assets/img/domo.png" alt="domo"/>
+<div id="consoleMessage">
+    <h3><span id="errorMessage"></span></h3>
 </div>
 <script src="/assets/bundle.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
