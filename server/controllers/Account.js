@@ -147,8 +147,7 @@ const changePassword = (request, response) => {
               return res.status(400).json({ error: 'An error occurred' });
             }
 
-            res.redirect('/boards');
-            return false;
+            return res.json({ redirect: '/boards' });
           });
         });
       });
