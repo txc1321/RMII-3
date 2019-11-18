@@ -80,6 +80,9 @@ nav:nth-child(1) {
     border-left: 3px solid #FF1938;
     border-radius: 5px;
 }
+#loginConsoleMessage{
+    margin-top: 250px;
+}
 #user:focus, #pass:focus, #pass2:focus {
     outline: none;
     box-shadow: 0px 0px 1px 1px #55acee;
