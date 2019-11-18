@@ -77,6 +77,16 @@ app.engine('handlebars', expressHandlebars({ defaultLayout: 'main',
     concat(str1, str2) {
       return str1 + str2;
     },
+    // handlebar helper to format date property
+    handleDate(iDate) {
+      const date = new Date(iDate);
+
+      const day = date.getDate();
+      const month = date.getMonth();
+      const year = date.getFullYear();
+
+      return `${month + 1}/${day}/${year}`;
+    },
   },
 }));
 app.set('view engine', 'handlebars');

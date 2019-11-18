@@ -9,8 +9,8 @@
 </head>
 <body>
 <nav><a href="/login"><img id="logo" class="logo" src="/assets/img/logo.png" alt="logo"/></a>
-    <button class="btn btn-primary navlink"><a href="/logout">Log out</a></button>
-    <button class="btn btn-primary navlink"><a href="/changepass">Change Password</a></button>
+    <button class="btn btn-link navlink"><a href="/logout">Log out</a></button>
+    <button class="btn btn-link navlink"><a href="/changepass">Change Password</a></button>
 </nav>
 
 <section id="boards">
@@ -19,33 +19,31 @@
         <div class="remainingBoards">
             <!-- Boards remaining in plan -->
             <h3 class="boardsLeft">Free Boards Remaining: {{math 5 "-" count}}</h3>
-            <div class="premium row">
+            <div class="premium">
                 <h6 class="premiumCTA">Want to upgrade?</h6>
-                <button class="premiumButton btn btn-primary"><a href="/upgrade">Upgrade</a></button>
+                <button class="btn btn-link premiumButton"><a href="/upgrade">Upgrade</a></button>
             </div>
         </div>
         {{#each boards}}
             <!-- Board container -->
             <div class="board">
-                <div class="row">
-                    <h4 class="boardLabel">Name: {{this.name}}</h4>
-                    <div class="boardInfo">
-                        {{#if this.tickets}}
-                            <h4 class="boardLabel">Tickets: {{this.tickets.length}}</h4>
-                        {{else}}
-                            <h4 class="boardLabel">Tickets: None</h4>
-                        {{/if}}
-                    </div>
+                <h4 class="boardLabel">Name: {{this.name}}</h4>
+                {{#if this.tickets}}
+                    <h4 class="boardLabel">Tickets: {{this.tickets.length}}</h4>
+                {{else}}
+                    <h4 class="boardLabel">Tickets: None</h4>
+                {{/if}}
+                <div class="boardInfo">
                     <!-- Creates navigate and delete forms from index for each board -->
-                    <form id={{concat "boardNavForm" @index}} name={{concat "boardNavForm" @index}} action="/boardNav" method="POST" class="boardNavForm">
+                    <form id={{concat "boardNavForm" @index}} name={{concat "boardNavForm" @index}} action="/boardNav" method="POST" class="functionForm">
                         <input type="hidden" name="_csrf" value={{../csrfToken}} />
                         <input type="hidden" name="_id" value={{this.id}} />
-                        <input class="boardNavSubmit btn btn-primary" type="submit" value="View"/>
+                        <input class="formSubmit" type="submit" value="View"/>
                     </form>
-                    <form id={{concat "boardDeleteForm" @index}} name={{concat "boardDeleteForm" @index}} action="/deleteBoard" method="delete" class="boardDeleteForm">
+                    <form id={{concat "boardDeleteForm" @index}} name={{concat "boardDeleteForm" @index}} action="/deleteBoard" method="delete" class="functionForm">
                         <input type="hidden" name="_csrf" value={{../csrfToken}} />
                         <input type="hidden" name="_id" value={{this.id}} />
-                        <input class="deleteBoardSubmit btn btn-primary" type="submit" value="X"/>
+                        <input class="formSubmit" type="submit" value="X"/>
                     </form>
                 </div>
             </div>
@@ -58,16 +56,15 @@
     <div class="boardFormContainer">
         <form id="boardForm" name="boardForm" action="/makeBoard" method="POST" class="boardForm">
             <div class="row">
-                <label for="name">Name: </label>
-                <input id="boardName" class="form-control" type="text" name="name" placeholder="Name"/>
+                <input id="boardName" class="formInput" class="form-control" type="text" name="name" placeholder="Name"/>
                 <input type="hidden" name="_csrf" value={{csrfToken}} />
                 <input type="hidden" name="boardCount" value={{count}} />
-                <input class="makeBoardSubmit btn btn-primary" type="submit" value="Make Board" />
+                <input class="formSubmit" type="submit" value="Make Board" />
             </div>
         </form>
     </div>
 </section>
-<div id="consoleMessage">
+<div id="consoleMessage" class="required">
     <h3><span id="errorMessage"></span></h3>
 </div>
 <script src="/assets/bundle.js"></script>

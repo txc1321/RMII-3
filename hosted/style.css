@@ -8,7 +8,7 @@ html, body {
 
 #logo {
     height: 40px;
-    width: 40;
+    width: 40px;
     padding-top: 5px;
     float:left;
     border-radius: 8px;
@@ -34,136 +34,182 @@ nav:nth-child(1) {
 .navlink {
     float: right;
     padding: 20px;
-    background-color: #00aeff;
-    color: white;
     font-size: 1.3em;
     margin: 10px;
 }
-
-.navlink a, .navlink a:link, .navlink a:visited, .navlink a:hover, .navlink a:active {
-    color: white;
+.navlink a, .navlink a:link, .navlink a:visited, .navlink a:active, .premiumButton a{
+    padding: 5px 10px 5px 10px;
+    color: black;
     text-decoration: none;
-    padding: 5px;
-    border-radius: 4px;
+    border: 3px solid #00aeff;
+    border-radius: 5px;
     transition: background-color 0.4s ease;
+}
+.navlink a:hover, .premiumButton a:hover{
+    text-decoration: none;
+    color: white;
+    background-color: #00aeff;
+}
+
+.formSubmit{
+    margin-top: 25px;
+    padding: 10px 15px 10px 15px;
+    color: black;
+    background-color: white;
+    text-decoration: none;
+    border: 3px solid #00aeff;
+    border-radius: 5px;
+    transition: background-color 0.4s ease;
+}
+.formSubmit:hover{
+    color: white;
+    background-color: #00aeff;
+}
+.formInput{
+    margin: 0 .25rem;
+    min-width: 125px;
+    border: 1px solid #eee;
+    border-left: 3px solid #00aeff;
+    border-radius: 5px;
+    transition: border-color .5s ease-out;
+}
+.required {
+    margin-left: 38%;
+    width: 20%;
+    border: 1px solid #eee;
+    border-left: 3px solid #FF1938;
+    border-radius: 5px;
+}
+#user:focus, #pass:focus, #pass2:focus {
+    outline: none;
+    box-shadow: 0px 0px 1px 1px #55acee;
+}
+#login, #signup, #changePassword{
+    margin-top: -200px;
+}
+#changePassword{
+    text-align: center;
+}
+#changePasswordForm input{
+    margin-top: 10px;
+}
+#changePasswordForm .formSubmit{
+    width: 60%;
+}
+.signupUser{
+    margin-bottom: 15px;
 }
 
 .ticketContainer{
     display: inline-block;
-    width: 17%;
-    height: 75%;
-    margin: 3% 1% 0.5% 0.5%;
+    width: 18%;
+    height: 70%;
+    margin: 80px 1% 0.5% 0.5%;
     text-align: center;
-}
-
-.sortButtons{
-    margin: 10px;
-}
-
-.tickets{
-    width: 100%;
-    height: 100%;
     overflow-y: scroll;
 }
-
-.ticket{
-    width: 300px;
+.ticketFunctionForm{
+    margin-top: -25px;
 }
-
+.ticketFunctionForm .formSubmit{
+    padding: 5px 10px 5px 10px;
+}
+.ticket{
+    width: auto;
+}
 .ticketTitle{
     font-size: 20px;
 }
-
 .ticketPriority, .ticketDueDate, .ticketDesc{
     font-size: 15px;
 }
-
 .ticketFormContainer{
-    padding-left: 200px;
-    padding-right: 200px;
+    padding-left: 10%;
+    padding-right: 10%;
 }
-
 .ticketForm{
     width: auto;
     margin-top: 25px;
 }
-
-.ticketForm label{
-    margin-right: 25px;
-}
-
 .ticketForm input{
     margin-right: 25px;
 }
-
+.ticketForm .formSubmit{
+    padding: 25px 15px 25px 15px;
+}
 #ticketDueDate, #ticketTitle, #ticketPriority{
     width: 25%;
     margin-bottom: 15px;
 }
-
 #ticketDesc{
-    width: 74%;
-}
-
-.makeTicketSubmit {
-    transition: background-color 0.4s ease;
-    width: 8%;
-    border-radius: 2px;
-    color: white;
-    text-decoration: none;
-}
-
-.premium{
-    padding-left: 45%;
-    margin-bottom: 1%;
-}
-
-.premiumCTA{
-    margin-right: 1%;
+    width: 69.5%;
 }
 
 #boards{
     text-align: center;
-    margin-top: 6%;
+    margin-top: 10%;
     margin-left: 2%;
     margin-right: 2%;
 }
-
-.board{
-    padding-left: 40%;
+.premium{
+    width: auto;
+    margin-bottom: 1%;
 }
-.boardButton{
-    height: 5%;
+.premiumCTA{
+    margin-top: 0.5%;
     margin-right: 1%;
 }
-
-.boardLabel{
-    margin-left: 1%;
+.board{
+    width: auto;
 }
-
+.board h4{
+    display: inline;
+    margin-right: 5px;
+}
+.boardInfo{
+    display: inline;
+}
+.boardButton, .functionForm{
+    display: inline;
+}
+.boardInfo .formSubmit{
+    margin: 0;
+    padding: 5px 10px 5px 10px;
+}
 .boardFormContainer{
     margin-top: 5%;
     margin-left: 2%;
     margin-right: 2%;
 }
-
 .boardForm{
-    padding-left: 700px;
+    padding-left: 38%;
 }
-
 #boardName{
-    margin-left: 15px;
-    margin-right: 15px;
+    margin-top: 25px;
+    height: 50px;
     width: 25%;
 }
 
-.makeDomoSubmit:link, .makeDomoSubmit:visited, .makeDomoSubmit:hover, .makeDomoSubmit:active {
-    color: white;
+#upgradeDesc{
+    text-align: center;
 }
-
-.makeDomoSubmit:hover {
+#upgradeDesc p{
+    display: inline;
+}
+.upgradeBtn{
+    margin: 0 0 15px 5px;
+    background-color: white;
+    padding: 5px 10px 5px 10px;
+    color: black;
+    text-decoration: none;
+    border: 3px solid #00aeff;
+    border-radius: 5px;
     transition: background-color 0.4s ease;
-    background-color: #338acc;
+}
+.upgradeBtn:hover{
+    text-decoration: none;
+    color: white;
+    background-color: #00aeff;
 }
 
 .mainForm {
@@ -173,42 +219,15 @@ nav:nth-child(1) {
     padding-top: 350px;
     font-size: 1.2em;
 }
-
 .mainForm h3 {
     text-align: center;
 }
-
 .mainForm label {
     display: inline-block;
     width: 100px;
     margin-right: 10px;
     text-align: right;
     font-size: 1.2em;
-}
-
-.formSubmit {
-    transition: background-color 0.4s ease;
-    display: block;
-    text-align: center;
-    margin: 0 auto;
-    margin-top: 14px;
-    font-size: 1.2em;
-    width: 100px;
-    background-color: #55acee;
-    border-radius: 2px;
-    border-color: #66acee;
-    padding: 3px 0px;
-    color: white;
-    text-decoration: none;
-}
-
-.formSubmit:link, .formSubmit:visited, .formSubmit:hover, .formSubmit:active {
-    color: white;
-}
-
-.formSubmit:hover {
-    transition: background-color 0.4s ease;
-    background-color: #338acc;
 }
 
 #user, #pass, #pass2 {
@@ -218,38 +237,8 @@ nav:nth-child(1) {
     border-radius: 6px;
 }
 
-#user:focus, #pass:focus, #pass2:focus {
-    outline: none;
-    box-shadow: 0px 0px 1px 1px #55acee;
-}
-
-#domoMessage {
-    display:none;
-    top: 250px;
-    width: 250px;
-    height: 650px;
-    position: absolute;
-    z-index: 200;
-    right: 0px;
-    overflow: hidden;
-}
-
-#domoMessage h3 {
-    width: 200px;
-    position: absolute;
-    top: 0px;
-    left: 20px;
-}
-
-#speech {
-    height: 120px;
-    width: 250px;
-    z-index:300;
-}
-
-#errorMessage {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: red;
-    font-style: italic;
+#message{
+    padding-top: 150px;
+    padding-left: 150px;
+    font-size: 2em;
 }

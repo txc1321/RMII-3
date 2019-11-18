@@ -9,6 +9,7 @@ const router = (app) => {
   app.get('/boards', mid.requiresLogin, controllers.Board.getBoards);
   app.get('/upgrade', mid.requiresLogin, controllers.Board.getUpgrade);
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+  app.get('/*', controllers.Account.notFound);
   app.post('/boardNav', mid.requiresLogin, controllers.Board.goToBoard);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);

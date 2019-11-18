@@ -16,6 +16,11 @@ const changePassPage = (req, res) => {
   res.render('changePass', { csrfToken: req.csrfToken() });
 };
 
+// 404 redirect function
+const notFound = (req, res) => {
+  res.render('404', { url: req.url });
+};
+
 // logout session destroy function
 const logout = (req, res) => {
   req.session.destroy();
@@ -155,4 +160,5 @@ module.exports.signupPage = signupPage;
 module.exports.signup = signup;
 module.exports.changePassPage = changePassPage;
 module.exports.changePassword = changePassword;
+module.exports.notFound = notFound;
 

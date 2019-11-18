@@ -1,10 +1,13 @@
 'use strict';
 
+// handle error message
 var handleError = function handleError(message) {
   console.log(message);
   $('#consoleMessage').html(message);
+  $('#consoleMessage').show();
 };
 
+// send AJAX data through XHR from form
 var sendAjax = function sendAjax(type, action, data) {
   $.ajax({
     cache: false,
@@ -24,6 +27,7 @@ var sendAjax = function sendAjax(type, action, data) {
   });
 };
 
+// function to send AJAX for form based on form ID
 var setSubmit = function setSubmit(uID) {
   $(uID).on('submit', function (e) {
     e.preventDefault();
@@ -33,7 +37,11 @@ var setSubmit = function setSubmit(uID) {
   });
 };
 
+// call on page ready
 $(document).ready(function () {
+  $('#consoleMessage').hide();
+
+  // set submit for non user input forms
   for (var i = 0; i < 5; i++) {
     setSubmit('#boardNavForm' + i);
     setSubmit('#boardDeleteForm' + i);
@@ -42,6 +50,7 @@ $(document).ready(function () {
     setSubmit('#ticketDeleteForm' + _i);
   }
 
+  // sign up form handler
   $('#signupForm').on('submit', function (e) {
     e.preventDefault();
 
@@ -60,6 +69,7 @@ $(document).ready(function () {
     return false;
   });
 
+  // login form handler
   $('#loginForm').on('submit', function (e) {
     e.preventDefault();
 
@@ -73,6 +83,7 @@ $(document).ready(function () {
     return false;
   });
 
+  // change password form handler
   $('#changePasswordForm').on('submit', function (e) {
     e.preventDefault();
 
@@ -94,6 +105,7 @@ $(document).ready(function () {
     return false;
   });
 
+  // ticket form handler
   $('#ticketForm').on('submit', function (e) {
     e.preventDefault();
 
@@ -107,6 +119,7 @@ $(document).ready(function () {
     return false;
   });
 
+  // board form handler
   $('#boardForm').on('submit', function (e) {
     e.preventDefault();
 

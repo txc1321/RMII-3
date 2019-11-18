@@ -9,8 +9,8 @@
 </head>
 <body>
   <nav><a href="/login"><img id="logo" class="logo" src="/assets/img/logo.png" alt="logo"/></a>
-    <button class="btn btn-primary navlink"><a href="/boards">Boards</a></button>
-    <button class="btn btn-primary navlink"><a href="/logout">Log out</a></button>
+    <button class="btn btn-link navlink"><a href="/boards">Boards</a></button>
+    <button class="btn btn-link navlink"><a href="/logout">Log out</a></button>
   </nav>
 
   <section id="tickets">
@@ -20,23 +20,23 @@
             <div class="ticketContainer">
                 <h3>Priority: {{math 5 "-" @index}}</h3>
                 {{#if this}}
-                    <div class="tickets">
-                            {{#each this}}
-                                <!-- Ticket container -->
-                                <div class="ticket">
-                                    <h3 class="ticketTitle">Title: {{this.title}}</h3>
-                                    <h3 class="ticketPriority">Priority: {{this.priority}}</h3>
-                                    <h3 class="ticketDueDate">Due Date: {{this.dueDate}}</h3>
-                                    <h3 class="ticketDesc">Description: {{this.description}}</h3>
-                                    <!-- Creates a form to delete each ticket, id generated from index -->
-                                    <form id={{concat "ticketDeleteForm" @index}} name={{concat "ticketDeleteForm" @index}} action="/resolveTicket" method="delete" class="ticketDeleteForm">
-                                        <input type="hidden" name="_csrf" value={{../../csrfToken}} />
-                                        <input type="hidden" name="_id" value={{this.id}} />
-                                        <input type="hidden" name="_boardID" value={{../../boardID}} />
-                                        <input class="deleteTicketSubmit btn btn-primary" type="submit" value="X"/>
-                                    </form>
-                                </div>
-                            {{/each}}
+                    <div>
+                        {{#each this}}
+                            <!-- Ticket container -->
+                            <div class="ticket">
+                                <h3 class="ticketTitle">Title: {{this.title}}</h3>
+                                <h3 class="ticketPriority">Priority: {{this.priority}}</h3>
+                                <h3 class="ticketDueDate">Due Date: {{handleDate this.dueDate}}</h3>
+                                <h3 class="ticketDesc">Description: {{this.description}}</h3>
+                                <!-- Creates a form to delete each ticket, id generated from index -->
+                                <form id={{concat "ticketDeleteForm" @index}} name={{concat "ticketDeleteForm" @index}} action="/resolveTicket" method="delete" class="ticketFunctionForm">
+                                    <input type="hidden" name="_csrf" value={{../../csrfToken}} />
+                                    <input type="hidden" name="_id" value={{this.id}} />
+                                    <input type="hidden" name="_boardID" value={{../../boardID}} />
+                                    <input class="formSubmit" type="submit" value="X"/>
+                                </form>
+                            </div>
+                        {{/each}}
                     </div>
                 {{else}}
                     <h3 class="emptyTickets">No Tickets</h3>
@@ -51,24 +51,20 @@
       <div class="ticketFormContainer">
           <form id="ticketForm" name="ticketForm" action="/makeTicket" method="POST" class="ticketForm">
             <div class="row">
-              <label for="title">Title: </label>
-              <input id="ticketTitle" class="form-control" type="text" name="title" placeholder="Title"/>
-              <label for="priority">Priority: </label>
-              <input id="ticketPriority" class="form-control" type="text" name="priority" placeholder="Priority"/>
-              <label for="dueDate">Due Date: </label>
-              <input class="form-control" id="ticketDueDate" type="date" name="dueDate" placeholder="Due Date"/>
+              <input id="ticketTitle" class="formInput" type="text" name="title" placeholder="Title"/>
+              <input id="ticketPriority" class="formInput" type="text" name="priority" placeholder="Priority"/>
+              <input id="ticketDueDate" class="formInput" type="date" name="dueDate" placeholder="Due Date"/>
             </div>
             <div class="row">
-              <label for="description">Description: </label>
-              <input class="form-control" id="ticketDesc" type="text" name="description" placeholder="Description" />
+              <input id="ticketDesc" class="formInput" type="text" name="description" placeholder="Description" />
               <input type="hidden" name="boardID" value={{boardID}}>
               <input type="hidden" name="_csrf" value={{csrfToken}} />
-              <input class="makeTicketSubmit btn btn-primary" type="submit" value="Make Ticket" />
+              <input class="formSubmit" type="submit" value="Make Ticket" />
             </div>
             </form>
       </div>
   </section>
-  <div id="consoleMessage">
+  <div id="consoleMessage" class="required">
       <h3><span id="errorMessage"></span></h3>
   </div>
   <script src="/assets/bundle.js"></script>

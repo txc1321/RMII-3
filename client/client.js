@@ -2,6 +2,7 @@
 const handleError = (message) => {
   console.log(message);
   $('#consoleMessage').html(message);
+  $('#consoleMessage').show();
 };
 
 // send AJAX data through XHR from form
@@ -36,6 +37,8 @@ const setSubmit = (uID) => {
 
 // call on page ready
 $(document).ready(() => {
+  $('#consoleMessage').hide();
+
   // set submit for non user input forms
   for (let i = 0; i < 5; i++) {
     setSubmit('#boardNavForm' + i);
