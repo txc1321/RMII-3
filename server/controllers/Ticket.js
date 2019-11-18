@@ -61,7 +61,6 @@ const makeTicket = (req, res) => {
     return res.status(400).json({ error: 'Title, Priority, and Due Date are all required' });
   }
 
-  console.log(req.body.dueDate);
   // create new ticket
   const TicketData = {
     title: req.body.title,
@@ -91,9 +90,7 @@ const makeTicket = (req, res) => {
 
       return false;
     });
-    boardPromise.then(() => {
-      return false;
-    });
+    boardPromise.then(() => false);
     boardPromise.catch((err) => {
       console.log(err);
 
