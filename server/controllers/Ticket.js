@@ -1,5 +1,4 @@
 const models = require('../models');
-const url = require('url');
 const Ticket = models.Ticket;
 const Board = models.Board;
 
@@ -52,7 +51,7 @@ const ticketsPage = (req, res) => {
 // sort tickets by priority function
 const groupTickets = (req, res) => {
   // grabs board ID from url
-  // This is where I can't find the url
+  const boardID = req.query.id;
   // array for ticket manipulation
   let allTickets = [];
   // promise that finds tickets based on owner and board
@@ -92,7 +91,6 @@ const groupTickets = (req, res) => {
       // adds priority arrays with adjusted index
       priorityTickets.tickets.push(sortStruct.tickets[i - 1]);
     }
-    console.log(boardID);
     return res.json({ priorities: priorityTickets, boardID });
   });
 };
@@ -189,8 +187,9 @@ const deleteTicketFromBoard = (request, response) => {
     return res.status(400).json({ error: 'An error occurred' });
   });
 
+  console.log(req.body);
   // promise to find board holding all relevant tickets
-  const boardPromise = Board.BoardModel.findOne({ _id: req.body._boardID }, (err, docs) => {
+  const boardPromise = Board.BoardModel.findOne({ id: req.body.boardID }, (err, docs) => {
     if (err) {
       return res.status(400).json({ error: 'An error occurred' });
     }

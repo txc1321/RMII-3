@@ -15,14 +15,13 @@ const handleTicket = (e) => {
   return false;
 };
 
-const handleDelete = (name) => {
+const handleDelete = (ID, boardID) => {
   sendAjax('GET', '/getToken', null, (result) => {
     sendDelete(result.csrfToken);
   });
 
   const sendDelete = (token) => {
-    const data = "name=" + name +"&_csrf=" + token;
-
+    const data = "id=" + ID +"&_csrf=" + token + "&boardID=" + boardID;
     sendAjax('DELETE', '/resolveTicket', data, function() {
       loadTicketsFromServer();
     });
@@ -96,27 +95,24 @@ const TicketList = function(props) {
         return (
           <div className="ticketContainer">
             <h3>Priority: {5-index}</h3>
-            {tickets.forEach(ticket => {
-              return(
-                <div className="ticket">
-                  <h3 className="ticketTitle">Title: {ticket.title}</h3>
-                  <h3 className="ticketPriority">Priority: {ticket.priority}</h3>
-                  <h3 className="ticketDueDate">Due Date: {ticket.dueDate}</h3>
-                  <h3 className="ticketDesc">Description: {ticket.description}</h3>
-                  <form id={"ticketDeleteForm" + index}
-                        name={"ticketDeleteForm" + index}
-                        onSubmit={handleDelete(ticket.name)}
-                        action="/resolveTicket"
-                        method="delete"
-                        className="ticketFunctionForm">
-                    <input type="hidden" name="_csrf" value={props.csrf}/>
-                    <input type="hidden" name="_id" value={ticket._id}/>
-                    <input type="hidden" name="_boardID" value={props.boardID}/>
-                    <input className="formSubmit" type="submit" value="X"/>
-                  </form>
-                </div>
-              );
-            })}
+            {
+              tickets.map((ticket, index) => {
+                return(
+                  <div className="ticket">
+                    <h3 className="ticketTitle">Title: {ticket.title}</h3>
+                    <h3 className="ticketPriority">Priority: {ticket.priority}</h3>
+                    <h3 className="ticketDueDate">Due Date: {ticket.dueDate}</h3>
+                    <h3 className="ticketDesc">Description: {ticket.description}</h3>
+                    <button id={"ticketDelete" + index}
+                            name={"ticketDelete" + index}
+                            onClick={() => handleDelete(ticket._id, ticket.boardID)}
+                            className="formSubmit">
+                      X
+                    </button>
+                  </div>
+                );
+              })
+            }
           </div>
         );
       }
@@ -137,7 +133,8 @@ const TicketList = function(props) {
 };
 
 const loadTicketsFromServer = () => {
-  sendAjax('GET', '/getTickets', null, (data) => {
+  let boardID = window.location.search.substring(4);
+  sendAjax('GET', `/getTickets?id=${boardID}`, null, (data) => {
     ReactDOM.render(
       <TicketList priorities={data.priorities} boardID={data.boardID} />, document.querySelector("#tickets")
     );

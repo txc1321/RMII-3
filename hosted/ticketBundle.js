@@ -15,14 +15,13 @@ var handleTicket = function handleTicket(e) {
   return false;
 };
 
-var handleDelete = function handleDelete(name) {
+var handleDelete = function handleDelete(ID, boardID) {
   sendAjax('GET', '/getToken', null, function (result) {
     sendDelete(result.csrfToken);
   });
 
   var sendDelete = function sendDelete(token) {
-    var data = "name=" + name + "&_csrf=" + token;
-
+    var data = "id=" + ID + "&_csrf=" + token + "&boardID=" + boardID;
     sendAjax('DELETE', '/resolveTicket', data, function () {
       loadTicketsFromServer();
     });
@@ -111,7 +110,7 @@ var TicketList = function TicketList(props) {
             'Priority: ',
             5 - index
           ),
-          tickets.forEach(function (ticket) {
+          tickets.map(function (ticket, index) {
             return React.createElement(
               'div',
               { className: 'ticket' },
@@ -140,17 +139,14 @@ var TicketList = function TicketList(props) {
                 ticket.description
               ),
               React.createElement(
-                'form',
-                { id: "ticketDeleteForm" + index,
-                  name: "ticketDeleteForm" + index,
-                  onSubmit: handleDelete(ticket.name),
-                  action: '/resolveTicket',
-                  method: 'delete',
-                  className: 'ticketFunctionForm' },
-                React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
-                React.createElement('input', { type: 'hidden', name: '_id', value: ticket._id }),
-                React.createElement('input', { type: 'hidden', name: '_boardID', value: props.boardID }),
-                React.createElement('input', { className: 'formSubmit', type: 'submit', value: 'X' })
+                'button',
+                { id: "ticketDelete" + index,
+                  name: "ticketDelete" + index,
+                  onClick: function onClick() {
+                    return handleDelete(ticket._id, ticket.boardID);
+                  },
+                  className: 'formSubmit' },
+                'X'
               )
             );
           })
@@ -182,7 +178,8 @@ var TicketList = function TicketList(props) {
 };
 
 var loadTicketsFromServer = function loadTicketsFromServer() {
-  sendAjax('GET', '/getTickets', null, function (data) {
+  var boardID = window.location.search.substring(4);
+  sendAjax('GET', '/getTickets?id=' + boardID, null, function (data) {
     ReactDOM.render(React.createElement(TicketList, { priorities: data.priorities, boardID: data.boardID }), document.querySelector("#tickets"));
     ReactDOM.render(React.createElement(TicketForm, { csrf: data.csrfToken, boardID: data.boardID }), document.querySelector("#makeTicket"));
   });
