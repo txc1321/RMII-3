@@ -59,36 +59,7 @@ app.use(session({
     httpOnly: true,
   },
 }));
-app.engine('handlebars', expressHandlebars({ defaultLayout: 'main',
-  helpers: {
-    // handlebar helper to do basic math ops in view
-    math(Ivalue, operator, Rvalue) {
-      const newIvalue = parseFloat(Ivalue);
-      const newRvalue = parseFloat(Rvalue);
-      return {
-        '+': newIvalue + newRvalue,
-        '-': newIvalue - newRvalue,
-        '*': newIvalue * newRvalue,
-        '/': newIvalue / newRvalue,
-        '%': newIvalue % newRvalue,
-      }[operator];
-    },
-    // handlebar helper to concat two strings in view
-    concat(str1, str2) {
-      return str1 + str2;
-    },
-    // handlebar helper to format date property
-    handleDate(iDate) {
-      const date = new Date(iDate);
-
-      const day = date.getDate();
-      const month = date.getMonth();
-      const year = date.getFullYear();
-
-      return `${month + 1}/${day}/${year}`;
-    },
-  },
-}));
+app.engine('handlebars', expressHandlebars({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 app.set('views', `${__dirname}/../views`);
 app.use(cookieParser());

@@ -1,11 +1,16 @@
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <title>Co-Lab</title>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <link rel="shortcut icon" href="/assets/img/favicon.png"/>
-  <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="utf-8"/>
+    <title>Co-Lab</title>
+    <script crossorigin src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <script crossorigin src="https://unpkg.com/prop-types/prop-types.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.6.2/remarkable.min.js"></script>
+    <link rel="shortcut icon" href="/assets/img/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
   <nav><a href="/login"><img id="logo" class="logo" src="/assets/img/logo.png" alt="logo"/></a>
@@ -13,61 +18,12 @@
     <button class="btn btn-link navlink"><a href="/boards">Boards</a></button>
   </nav>
 
-  <section id="tickets">
-      {{#if priorities.tickets}}
-          {{#each priorities.tickets}}
-            <!-- Priority column container -->
-            <div class="ticketContainer">
-                <h3>Priority: {{math 5 "-" @index}}</h3>
-                {{#if this}}
-                    <div>
-                        {{#each this}}
-                            <!-- Ticket container -->
-                            <div class="ticket">
-                                <h3 class="ticketTitle">Title: {{this.title}}</h3>
-                                <h3 class="ticketPriority">Priority: {{this.priority}}</h3>
-                                <h3 class="ticketDueDate">Due Date: {{handleDate this.dueDate}}</h3>
-                                <h3 class="ticketDesc">Description: {{this.description}}</h3>
-                                <!-- Creates a form to delete each ticket, id generated from index -->
-                                <form id={{concat "ticketDeleteForm" @index}} name={{concat "ticketDeleteForm" @index}} action="/resolveTicket" method="delete" class="ticketFunctionForm">
-                                    <input type="hidden" name="_csrf" value={{../../csrfToken}} />
-                                    <input type="hidden" name="_id" value={{this.id}} />
-                                    <input type="hidden" name="_boardID" value={{../../boardID}} />
-                                    <input class="formSubmit" type="submit" value="X"/>
-                                </form>
-                            </div>
-                        {{/each}}
-                    </div>
-                {{else}}
-                    <h3 class="emptyTickets">No Tickets</h3>
-                {{/if}}
-            </div>
-          {{/each}}
-      {{/if}}
-
-
-  </section>
-  <section id="makeTicket">
-      <div class="ticketFormContainer">
-          <form id="ticketForm" name="ticketForm" action="/makeTicket" method="POST" class="ticketForm">
-            <div class="row">
-              <input id="ticketTitle" class="formInput" type="text" name="title" placeholder="Title"/>
-              <input id="ticketPriority" class="formInput" type="text" name="priority" placeholder="Priority"/>
-              <input id="ticketDueDate" class="formInput" type="date" name="dueDate" placeholder="Due Date"/>
-            </div>
-            <div class="row">
-              <input id="ticketDesc" class="formInput" type="text" name="description" placeholder="Description" />
-              <input type="hidden" name="boardID" value={{boardID}}>
-              <input type="hidden" name="_csrf" value={{csrfToken}} />
-              <input class="formSubmit" type="submit" value="Make Ticket" />
-            </div>
-            </form>
-      </div>
-  </section>
+  <section id="tickets"></section>
+  <section id="makeTicket"></section>
   <div id="consoleMessage" class="required">
       <h3><span id="errorMessage"></span></h3>
   </div>
-  <script src="/assets/bundle.js"></script>
+  <script src="/assets/ticketBundle.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>

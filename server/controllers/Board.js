@@ -3,7 +3,7 @@ const Board = models.Board;
 const Ticket = models.Ticket;
 
 // get boards function
-const getBoards = (req, res) => {
+const boardsPage = (req, res) => {
   // find all boards under the account
   Board.BoardModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
@@ -15,6 +15,22 @@ const getBoards = (req, res) => {
     const number = docs.length;
 
     return res.render('appBoards', { csrfToken: req.csrfToken(), boards: docs, count: number });
+  });
+};
+
+// get boards function
+const getBoards = (req, res) => {
+  // find all boards under the account
+  Board.BoardModel.findByOwner(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error has occurred' });
+    }
+
+    // get number of total boards
+    const number = docs.length;
+
+    return res.json({ boards: docs, count: number });
   });
 };
 
@@ -57,8 +73,10 @@ const deleteBoard = (request, response) => {
   const req = request;
   const res = response;
 
+  console.log(req.body);
+
   // promise to delete all tickets belonging to the board
-  const ticketPromise = Ticket.TicketModel.deleteMany({ boardID: req.body._id }, (err) => {
+  const ticketPromise = Ticket.TicketModel.deleteMany({ boardID: req.body.id }, (err) => {
     if (err) {
       return res.status(400).json({ error: 'An error occurred' });
     }
@@ -74,7 +92,7 @@ const deleteBoard = (request, response) => {
 
 
   // promise to delete board
-  const boardPromise = Board.BoardModel.deleteOne({ _id: req.body._id }, (err) => {
+  const boardPromise = Board.BoardModel.deleteOne({ _id: req.body.id }, (err) => {
     if (err) {
       return res.status(400).json({ error: 'An error occurred' });
     }
@@ -93,23 +111,13 @@ const deleteBoard = (request, response) => {
   return boardPromise;
 };
 
-// board navigation function
-const goToBoard = (request, response) => {
-  const req = request;
-  const res = response;
-
-  const ID = req.body._id;
-  // redirect to board url with ID
-  res.json({ redirect: `/tickets?id=${ID}` });
-};
-
 // upgrade page navigation funtion
 const getUpgrade = (req, res) => {
   res.render('upgrade', { csrfToken: req.csrfToken() });
 };
 
+module.exports.boardsPage = boardsPage;
 module.exports.getBoards = getBoards;
 module.exports.makeBoard = makeBoard;
 module.exports.deleteBoard = deleteBoard;
-module.exports.goToBoard = goToBoard;
 module.exports.getUpgrade = getUpgrade;

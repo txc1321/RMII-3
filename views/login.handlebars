@@ -2,32 +2,26 @@
 <head>
   <meta charset="utf-8"/>
   <title>Co-Lab</title>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@15/dist/react.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+    <script crossorigin src="https://unpkg.com/prop-types/prop-types.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.6.2/remarkable.min.js"></script>
   <link rel="shortcut icon" href="/assets/img/favicon.png"/>
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
   <nav><a href="/login"><img id="logo" class="logo" src="/assets/img/logo.png" alt="logo"/></a>
-    <div class="btn btn-link navlink"><a href="/login">Login</a></div>
-    <div class="btn btn-link navlink"><a href="/signup">Sign up</a></div>
+    <div class="btn btn-link navlink"><a id="loginButton" href="/login">Login</a></div>
+    <div class="btn btn-link navlink"><a id="signupButton" href="/signup">Sign up</a></div>
   </nav>
-  <section id="login">
-    <form id="loginForm" name="loginForm" action="/login" method="POST" class="mainForm">
-    <div class="row">
-      <input class="formInput" id="user" type="text" name="username" placeholder="username"/>
-      <input class="formInput" id="pass" type="password" name="pass" placeholder="password"/>
-    </div>
-    <div class="row">
-      <input type="hidden" name="_csrf" value={{csrfToken}} />
-      <input class="formSubmit" type="submit" value="Sign In" />
-    </div>
-    </form>
-  </section>
+  <section id="content"></section>
   <div id="loginConsoleMessage" class="required">
       <h3><span id="errorMessage"></span></h3>
   </div>
-  <script src="/assets/bundle.js"></script>
+  <script src="/assets/loginBundle.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>

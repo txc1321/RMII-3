@@ -1,9 +1,9 @@
 const models = require('../models');
+const url = require('url');
 const Ticket = models.Ticket;
 const Board = models.Board;
 
-// sort tickets by priority function
-const groupTickets = (req, res) => {
+const ticketsPage = (req, res) => {
   // grabs board ID from url
   const boardID = req.query.id;
   // array for ticket manipulation
@@ -49,6 +49,54 @@ const groupTickets = (req, res) => {
   });
 };
 
+// sort tickets by priority function
+const groupTickets = (req, res) => {
+  // grabs board ID from url
+  // This is where I can't find the url
+  // array for ticket manipulation
+  let allTickets = [];
+  // promise that finds tickets based on owner and board
+  const ticketsPromise = Ticket.TicketModel.findByOwnerandBoard(req.session.account._id, boardID,
+    (err, docs) => {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({ error: 'An error has occurred' });
+      }
+      allTickets = docs;
+      return false;
+    });
+
+  ticketsPromise.then(() => {
+    // creates data structures for passing data to view
+    const priorityTickets = {
+      tickets: [],
+    };
+    // creates a data structure for holding priority arrays
+    const sortStruct = {
+      tickets: [],
+    };
+
+    for (let i = 1; i < 6; i++) {
+      const priorityArray = [];
+      for (let j = 0; j < allTickets.length; j++) {
+        // adds ticket to appropriate priority array if priority property matches
+        if (allTickets[j].priority === i) {
+          priorityArray.push(allTickets[j]);
+        }
+      }
+      // adds arrays of tickets to sort structure
+      sortStruct.tickets.push(priorityArray);
+    }
+
+    for (let i = 5; i > 0; i--) {
+      // adds priority arrays with adjusted index
+      priorityTickets.tickets.push(sortStruct.tickets[i - 1]);
+    }
+    console.log(boardID);
+    return res.json({ priorities: priorityTickets, boardID });
+  });
+};
+
 // wrapper method grouping tickets
 const getTickets = (req, res, ID) => {
   groupTickets(req, res, ID);
@@ -61,12 +109,19 @@ const makeTicket = (req, res) => {
     return res.status(400).json({ error: 'Title, Priority, and Due Date are all required' });
   }
 
+  const date = new Date(req.body.dueDate);
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+
+  const formattedDate = `${month + 1}/${day}/${year}`;
+
   // create new ticket
   const TicketData = {
     title: req.body.title,
     description: req.body.description,
     priority: req.body.priority,
-    dueDate: req.body.dueDate,
+    dueDate: formattedDate,
     boardID: req.body.boardID,
     owner: req.session.account._id,
   };
@@ -74,31 +129,7 @@ const makeTicket = (req, res) => {
   const newTicket = new Ticket.TicketModel(TicketData);
 
   const ticketPromise = newTicket.save();
-  ticketPromise.then(() => {
-    // grab board id from form and find the specific board
-    const search = { _id: req.body.boardID };
-    const boardPromise = Board.BoardModel.findOne(search, (err, docs) => {
-      if (err) {
-        return res.status(400).json({ error: 'An error occurred' });
-      }
-      const newTickets = [];
-      // add new ticket to board tickets list
-      newTickets.push(ticketPromise);
-      const allTickets = docs.tickets.concat(newTickets);
-      docs.tickets.splice(0, docs.tickets.length, ...allTickets);
-      docs.save();
-
-      return false;
-    });
-    boardPromise.then(() => false);
-    boardPromise.catch((err) => {
-      console.log(err);
-
-      return res.status(400).json({ error: 'An error occurred' });
-    });
-    // redirect to the right board url
-    res.json({ redirect: `/tickets?id=${req.body.boardID}` });
-  });
+  ticketPromise.then(() => false);
   ticketPromise.catch((err) => {
     console.log(err);
     if (err.code === 11000) {
@@ -108,7 +139,31 @@ const makeTicket = (req, res) => {
     return res.status(400).json({ error: 'An error occurred' });
   });
 
-  return ticketPromise;
+  // grab board id from form and find the specific board
+  const search = { _id: req.body.boardID };
+  const boardPromise = Board.BoardModel.findOne(search, (err, docs) => {
+    if (err) {
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+    const newTickets = [];
+    // add new ticket to board tickets list
+    newTickets.push(ticketPromise);
+    const allTickets = docs.tickets.concat(newTickets);
+    docs.tickets.splice(0, docs.tickets.length, ...allTickets);
+    docs.save();
+
+    return false;
+  });
+  boardPromise.then(() => false);
+  boardPromise.catch((err) => {
+    console.log(err);
+
+    return res.status(400).json({ error: 'An error occurred' });
+  });
+  // redirect to the right board url
+  res.json({ redirect: `/tickets?id=${req.body.boardID}` });
+
+  return boardPromise;
 };
 
 // delete tickets from a board function
@@ -214,6 +269,7 @@ const deleteBoardTickets = (request, response) => {
   return ticketsPromise;
 };
 
+module.exports.ticketsPage = ticketsPage;
 module.exports.getTickets = getTickets;
 module.exports.makeTicket = makeTicket;
 module.exports.resolveTicket = resolveTicket;

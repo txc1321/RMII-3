@@ -1,3 +1,5 @@
+/*
+
 // handle error message
 const handleError = (message) => {
   console.log(message);
@@ -107,6 +109,7 @@ $(document).ready(() => {
     return false;
   });
 
+
   // ticket form handler
   $('#ticketForm').on('submit', (e) => {
     e.preventDefault();
@@ -137,3 +140,5 @@ $(document).ready(() => {
     return false;
   });
 });
+
+*/

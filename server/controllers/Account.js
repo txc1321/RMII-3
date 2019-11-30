@@ -6,11 +6,6 @@ const loginPage = (req, res) => {
   res.render('login', { csrfToken: req.csrfToken() });
 };
 
-// signup redirect function
-const signupPage = (req, res) => {
-  res.render('signup', { csrfToken: req.csrfToken() });
-};
-
 // password change redirect function
 const changePassPage = (req, res) => {
   res.render('changePass', { csrfToken: req.csrfToken() });
@@ -153,12 +148,22 @@ const changePassword = (request, response) => {
       });
 };
 
+const getToken = (request, response) => {
+  const req = request;
+  const res = response;
+
+  const csrfJSON = {
+    csrfToken: req.csrfToken(),
+  };
+
+  res.json(csrfJSON);
+};
+
 module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
-module.exports.signupPage = signupPage;
 module.exports.signup = signup;
 module.exports.changePassPage = changePassPage;
 module.exports.changePassword = changePassword;
 module.exports.notFound = notFound;
-
+module.exports.getToken = getToken;

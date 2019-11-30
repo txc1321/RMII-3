@@ -2,15 +2,15 @@ const controllers = require('./controllers');
 const mid = require('./middleware');
 const router = (app) => {
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
-  app.get('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signupPage);
+  app.get('/getToken', mid.requiresSecure, controllers.Account.getToken);
   app.get('/changepass', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassPage);
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
-  app.get('/tickets', mid.requiresLogin, controllers.Ticket.getTickets);
-  app.get('/boards', mid.requiresLogin, controllers.Board.getBoards);
+  app.get('/tickets', mid.requiresLogin, controllers.Ticket.ticketsPage);
+  app.get('/getTickets', mid.requiresLogin, controllers.Ticket.getTickets);
+  app.get('/boards', mid.requiresLogin, controllers.Board.boardsPage);
+  app.get('/getBoards', mid.requiresLogin, controllers.Board.getBoards);
   app.get('/upgrade', mid.requiresLogin, controllers.Board.getUpgrade);
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
-  app.get('/*', controllers.Account.notFound);
-  app.post('/boardNav', mid.requiresLogin, controllers.Board.goToBoard);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
   app.post('/changePassword',
