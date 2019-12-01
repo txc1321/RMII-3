@@ -50,7 +50,7 @@ const TicketForm = (props) => {
         <div className="row">
           <input id="ticketDesc" className="formInput" type="text" name="description"
                  placeholder="Description"/>
-          <input type="hidden" name="boardID" value={props.boardID}/>
+            <input type="hidden" name="boardID" value={props.boardID}/>
             <input type="hidden" name="_csrf" value={props.csrf}/>
             <input className="formSubmit" type="submit" value="Make Ticket"/>
         </div>
