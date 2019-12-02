@@ -121,6 +121,7 @@ const makeTicket = (req, res) => {
     priority: req.body.priority,
     dueDate: formattedDate,
     boardID: req.body.boardID,
+    comments: [],
     owner: req.session.account._id,
   };
 
@@ -227,8 +228,46 @@ const resolveTicket = (request, response) => {
   return ticketPromise;
 };
 
+const editTicket = (request, response) => {
+  const req = request;
+  const res = response;
+
+  const search = { _id: req.body.id };
+
+  const TicketData = {};
+
+  if (req.body.title && req.body.title !== '') {
+    TicketData.title = req.body.title;
+  }
+  if (req.body.dueDate && req.body.dueDate !== '') {
+    TicketData.dueDate = req.body.dueDate;
+  }
+  if (req.body.priority && req.body.priority !== '') {
+    TicketData.priority = req.body.priority;
+  }
+  if (req.body.description && req.body.description !== '') {
+    TicketData.description = req.body.description;
+  }
+
+  Ticket.TicketModel.findOneAndUpdate(
+    search,
+    TicketData,
+    { new: true },
+    (err) => {
+      if (err) {
+        return res.status(400).json({ error: 'An error occurred' });
+      }
+      return false;
+    }
+  );
+  // redirect to the right board url
+
+  return res.json({ redirect: `/tickets?id=${req.body.boardID}` });
+};
+
 module.exports.ticketsPage = ticketsPage;
 module.exports.getTickets = getTickets;
 module.exports.makeTicket = makeTicket;
+module.exports.editTicket = editTicket;
 module.exports.resolveTicket = resolveTicket;
 module.exports.deleteTicketFromBoard = deleteTicketFromBoard;

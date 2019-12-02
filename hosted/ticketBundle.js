@@ -30,6 +30,137 @@ var handleDelete = function handleDelete(ID, boardID) {
   return false;
 };
 
+var handleEdit = function handleEdit(e) {
+  e.preventDefault();
+
+  if ($('#ticketTitle').val() === '' && $('#ticketPriority').val() === '' && $('#ticketDueDate').val() === '' && $('#ticketDesc').val() === '') {
+    handleError('You must make a change to edit');
+    return false;
+  }
+
+  sendAjax('POST', $('#ticketForm').attr('action'), $('#ticketForm').serialize(), function () {
+    loadTicketsFromServer();
+  });
+
+  return false;
+};
+
+var handleEditForm = function handleEditForm(ID, boardID) {
+  sendAjax('GET', '/getToken', null, function (result) {
+    createEditForm(result.csrfToken);
+  });
+
+  var createEditForm = function createEditForm(token) {
+    ReactDOM.render(React.createElement(EditTicketForm, { csrf: token, id: ID, boardID: boardID }), document.querySelector("#makeTicket"));
+  };
+};
+
+var handleComment = function handleComment(e) {
+  e.preventDefault();
+
+  var ID = e.currentTarget.id.value;
+
+  if ($('#comment').val() === '') {
+    handleError('You must make a comment');
+    return false;
+  }
+
+  sendAjax('POST', $('#commentform' + ID).attr('action'), $('#commentform' + ID).serialize(), function () {
+    loadCommentsFromServer(ID);
+  });
+
+  return false;
+};
+
+var handleDeleteComment = function handleDeleteComment(ID) {
+  sendAjax('GET', '/getToken', null, function (result) {
+    sendDelete(result.csrfToken);
+  });
+
+  var sendDelete = function sendDelete(token) {
+    var data = "ticketID=" + ID + "&_csrf=" + token;
+    sendAjax('DELETE', '/removeComment', data, function () {
+      loadCommentsFromServer(ID);
+    });
+  };
+
+  return false;
+};
+
+var handleCommentForm = function handleCommentForm(ID) {
+  var toggle = true;
+  if (document.querySelector('#commentForm' + ID)) {
+    toggle = false;
+  }
+
+  if (toggle) {
+    loadCommentsFromServer(ID);
+  } else {
+    ReactDOM.render(React.createElement(CommentBlank, null), document.querySelector("#comments" + ID));
+  }
+};
+
+var CommentForm = function CommentForm(props) {
+  return React.createElement(
+    'form',
+    { id: "commentForm" + props.id,
+      name: 'commentForm',
+      onSubmit: handleComment,
+      action: '/addComment',
+      method: 'POST',
+      className: 'ticketForm' },
+    React.createElement(
+      'div',
+      { className: 'row' },
+      React.createElement('input', { id: 'comment', className: 'formInput', type: 'text', name: 'comment',
+        placeholder: 'comment' })
+    ),
+    React.createElement(
+      'div',
+      { className: 'row' },
+      React.createElement('input', { type: 'hidden', name: 'id', value: props.id }),
+      React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
+      React.createElement('input', { className: 'formSubmit', type: 'submit', value: 'Comment' })
+    )
+  );
+};
+
+var EditTicketForm = function EditTicketForm(props) {
+  return React.createElement(
+    'div',
+    { className: 'ticketFormContainer' },
+    React.createElement(
+      'form',
+      { id: 'ticketForm',
+        name: 'ticketForm',
+        onSubmit: handleEdit,
+        action: '/editTicket',
+        method: 'POST',
+        className: 'ticketForm' },
+      React.createElement(
+        'div',
+        { className: 'row' },
+        React.createElement('input', { id: 'ticketTitle', className: 'formInput', type: 'text', name: 'title',
+          placeholder: 'Title' }),
+        React.createElement('input', { id: 'ticketPriority', className: 'formInput', type: 'text', name: 'priority',
+          placeholder: 'Priority' }),
+        React.createElement('input', { id: 'ticketDueDate', className: 'formInput', type: 'date', name: 'dueDate',
+          placeholder: 'Due Date' })
+      ),
+      React.createElement(
+        'div',
+        { className: 'row' },
+        React.createElement('input', { id: 'ticketDesc', className: 'formInput', type: 'text', name: 'description',
+          placeholder: 'Description' }),
+        React.createElement('input', { type: 'hidden', name: 'id', value: props.id }),
+        React.createElement('input', { type: 'hidden', name: 'boardID', value: props.boardID }),
+        React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
+        React.createElement('input', { className: 'formSubmit', type: 'submit', value: 'Edit Ticket' })
+      )
+    )
+  );
+};
+
 var TicketForm = function TicketForm(props) {
   return React.createElement(
     'div',
@@ -65,6 +196,48 @@ var TicketForm = function TicketForm(props) {
   );
 };
 
+var CommentList = function CommentList(props) {
+  if (!props.comments) {
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'h3',
+        null,
+        'No comments'
+      )
+    );
+  } else {
+    var commentNodes = props.comments.map(function (comment, index) {
+      return React.createElement(
+        'li',
+        { id: comment.comment },
+        comment.comment,
+        React.createElement(
+          'button',
+          { id: "commentDelete" + index,
+            name: "commentDelete" + index,
+            onClick: function onClick() {
+              return handleDeleteComment(comment._id, comment.ticketID);
+            },
+            className: 'formSubmit' },
+          'X'
+        )
+      );
+    });
+
+    return React.createElement(
+      'ul',
+      { id: "comments" },
+      commentNodes
+    );
+  }
+};
+
+var CommentBlank = function CommentBlank() {
+  return React.createElement('div', null);
+};
+
 var TicketList = function TicketList(props) {
   if (!props.priorities.tickets) {
     return React.createElement(
@@ -77,28 +250,6 @@ var TicketList = function TicketList(props) {
       )
     );
   } else {
-    /*const ticketNodes = props.priorities.tickets.map(function (tickets, index) {
-      return(
-        <div className="ticket">
-          <h3 className="ticketTitle">Title: {ticket.title}</h3>
-          <h3 className="ticketPriority">Priority: {ticket.priority}</h3>
-          <h3 className="ticketDueDate">Due Date: {ticket.dueDate}</h3>
-          <h3 className="ticketDesc">Description: {ticket.description}</h3>
-          <form id={"ticketDeleteForm" + index}
-                name={"ticketDeleteForm" + index}
-                onSubmit={handleDelete(ticket.name)}
-                action="/resolveTicket"
-                method="delete"
-                className="ticketFunctionForm">
-            <input type="hidden" name="_csrf" value={props.csrf}/>
-            <input type="hidden" name="_id" value={ticket._id}/>
-            <input type="hidden" name="_boardID" value={props.boardID}/>
-            <input className="formSubmit" type="submit" value="X"/>
-          </form>
-        </div>
-      )
-    });*/
-
     var priorityNodes = props.priorities.tickets.map(function (tickets, index) {
       if (tickets.length > 0) {
         return React.createElement(
@@ -113,7 +264,7 @@ var TicketList = function TicketList(props) {
           tickets.map(function (ticket, index) {
             return React.createElement(
               'div',
-              { className: 'ticket' },
+              { className: 'ticket', id: ticket._id },
               React.createElement(
                 'h3',
                 { className: 'ticketTitle' },
@@ -147,7 +298,28 @@ var TicketList = function TicketList(props) {
                   },
                   className: 'formSubmit' },
                 'X'
-              )
+              ),
+              React.createElement(
+                'button',
+                { id: "ticketEdit" + index,
+                  name: "ticketEdit" + index,
+                  onClick: function onClick() {
+                    return handleEditForm(ticket._id, ticket.boardID);
+                  },
+                  className: 'formSubmit' },
+                'Edit'
+              ),
+              React.createElement(
+                'button',
+                { id: "ticketComments" + index,
+                  name: "ticketComments" + index,
+                  onClick: function onClick() {
+                    return handleCommentForm(ticket._id);
+                  },
+                  className: 'formSubmit' },
+                'Comments'
+              ),
+              React.createElement('section', { id: "comments" + ticket._id })
             );
           })
         );
@@ -182,6 +354,13 @@ var loadTicketsFromServer = function loadTicketsFromServer() {
   sendAjax('GET', '/getTickets?id=' + boardID, null, function (data) {
     ReactDOM.render(React.createElement(TicketList, { priorities: data.priorities, boardID: data.boardID }), document.querySelector("#tickets"));
     ReactDOM.render(React.createElement(TicketForm, { csrf: data.csrfToken, boardID: data.boardID }), document.querySelector("#makeTicket"));
+  });
+};
+
+var loadCommentsFromServer = function loadCommentsFromServer(ID) {
+  sendAjax('GET', '/getComments', null, function (data) {
+    ReactDOM.render(React.createElement(CommentList, { comments: data.comments }), document.querySelector("#comments" + ID));
+    ReactDOM.render(React.createElement(CommentForm, { csrf: data.csrfToken, id: ID }), document.querySelector("#comments" + ID));
   });
 };
 

@@ -34,6 +34,9 @@ const TicketSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  comments: {
+    type: Array,
+  },
   owner: {
     type: mongoose.Schema.ObjectId,
     required: true,

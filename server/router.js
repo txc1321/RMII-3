@@ -9,6 +9,7 @@ const router = (app) => {
   app.get('/getTickets', mid.requiresLogin, controllers.Ticket.getTickets);
   app.get('/boards', mid.requiresLogin, controllers.Board.boardsPage);
   app.get('/getBoards', mid.requiresLogin, controllers.Board.getBoards);
+  app.get('/getComments', mid.requiresLogin, controllers.Comment.getComments);
   app.get('/upgrade', mid.requiresLogin, controllers.Board.getUpgrade);
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
@@ -18,9 +19,12 @@ const router = (app) => {
       mid.requiresLogin,
       controllers.Account.changePassword);
   app.post('/makeTicket', mid.requiresLogin, controllers.Ticket.makeTicket);
+  app.post('/editTicket', mid.requiresLogin, controllers.Ticket.editTicket);
   app.post('/makeBoard', mid.requiresLogin, controllers.Board.makeBoard);
+  app.post('/addComment', mid.requiresLogin, controllers.Comment.makeComment);
   app.delete('/resolveTicket', mid.requiresLogin, controllers.Ticket.resolveTicket);
   app.delete('/deleteBoard', mid.requiresLogin, controllers.Board.deleteBoard);
+  app.delete('/deleteComment', mid.requiresLogin, controllers.Comment.deleteComment);
 };
 
 module.exports = router;
