@@ -1,3 +1,5 @@
+const globalToken = {};
+
 const handleTicket = (e) => {
   e.preventDefault();
 
@@ -70,7 +72,9 @@ const handleComment = (e) => {
     return false;
   }
 
-  sendAjax('POST', $(`#commentform${ID}`).attr('action'), $(`#commentform${ID}`).serialize(), function() {
+  console.log($('#commentform' + ID));
+  console.log($('#commentform' + ID).attr('action'));
+  sendAjax('POST', $('#commentform' + ID).attr('action'), $('#commentform' + ID).serialize(), function() {
     loadCommentsFromServer(ID);
   });
 
@@ -180,7 +184,7 @@ const TicketForm = (props) => {
           <input id="ticketDesc" className="formInput" type="text" name="description"
                  placeholder="Description"/>
             <input type="hidden" name="boardID" value={props.boardID}/>
-            <input type="hidden" name="_csrf" value={props.csrf}/>
+            <input type="hidden" id="globalCSRF" name="_csrf" value={props.csrf}/>
             <input className="formSubmit" type="submit" value="Make Ticket"/>
         </div>
       </form>
@@ -301,12 +305,13 @@ const loadTicketsFromServer = () => {
 };
 
 const loadCommentsFromServer = (ID) => {
+  const token = document.querySelector('#globalCSRF').value;
   sendAjax('GET', '/getComments', null, (data) => {
     ReactDOM.render(
       <CommentList comments={data.comments} />, document.querySelector("#comments" + ID)
     );
     ReactDOM.render(
-      <CommentForm csrf={data.csrfToken} id={ID} />, document.querySelector("#comments" + ID)
+      <CommentForm csrf={token} id={ID} />, document.querySelector("#comments" + ID)
     );
   });
 };

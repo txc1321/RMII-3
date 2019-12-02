@@ -1,5 +1,7 @@
 'use strict';
 
+var globalToken = {};
+
 var handleTicket = function handleTicket(e) {
   e.preventDefault();
 
@@ -65,6 +67,8 @@ var handleComment = function handleComment(e) {
     return false;
   }
 
+  console.log($('#commentform' + ID));
+  console.log($('#commentform' + ID).attr('action'));
   sendAjax('POST', $('#commentform' + ID).attr('action'), $('#commentform' + ID).serialize(), function () {
     loadCommentsFromServer(ID);
   });
@@ -189,7 +193,7 @@ var TicketForm = function TicketForm(props) {
         React.createElement('input', { id: 'ticketDesc', className: 'formInput', type: 'text', name: 'description',
           placeholder: 'Description' }),
         React.createElement('input', { type: 'hidden', name: 'boardID', value: props.boardID }),
-        React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
+        React.createElement('input', { type: 'hidden', id: 'globalCSRF', name: '_csrf', value: props.csrf }),
         React.createElement('input', { className: 'formSubmit', type: 'submit', value: 'Make Ticket' })
       )
     )
@@ -358,9 +362,10 @@ var loadTicketsFromServer = function loadTicketsFromServer() {
 };
 
 var loadCommentsFromServer = function loadCommentsFromServer(ID) {
+  var token = document.querySelector('#globalCSRF').value;
   sendAjax('GET', '/getComments', null, function (data) {
     ReactDOM.render(React.createElement(CommentList, { comments: data.comments }), document.querySelector("#comments" + ID));
-    ReactDOM.render(React.createElement(CommentForm, { csrf: data.csrfToken, id: ID }), document.querySelector("#comments" + ID));
+    ReactDOM.render(React.createElement(CommentForm, { csrf: token, id: ID }), document.querySelector("#comments" + ID));
   });
 };
 
