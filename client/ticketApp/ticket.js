@@ -70,11 +70,9 @@ const handleComment = (e) => {
     return false;
   }
 
-
   sendAjax('POST', $(`#commentform${ID}`).attr('action'), $(`#commentform${ID}`).serialize(), function() {
     loadCommentsFromServer(ID);
   });
-
 
   return false;
 };

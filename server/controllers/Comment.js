@@ -22,7 +22,7 @@ const getComments = (req, res) => {
       return false;
     });
 
-  commentPromise.then(() => res.json({ comments: allComments }));
+  commentPromise.then(() => res.json({ comments: allComments, csrfToken: req.csrfToken }));
   commentPromise.catch((err) => {
     console.log(err);
     return res.status(400).json({ error: 'An error occurred' });
