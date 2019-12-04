@@ -1,7 +1,6 @@
 const models = require('../models');
 const Board = models.Board;
 const Ticket = models.Ticket;
-const Account = models. Account;
 
 // get boards function
 const boardsPage = (req, res) => {
@@ -31,21 +30,7 @@ const getBoards = (req, res) => {
     // get number of total boards
     const number = docs.length;
 
-    const sharedBoards = getSharedBoards(req, res);
-    console.log(sharedBoards);
-
-    return res.json({ boards: docs, count: number, sharedBoards: sharedBoards });
-  });
-};
-
-const getSharedBoards = (req, res) => {
-  Account.AccountModel.findByID(req.session.account._id, (err, docs) => {
-    if (err) {
-      console.log(err);
-      return res.status(400).json({ error: 'An error has occurred' });
-    }
-
-    return docs.sharedBoards;
+    return res.json({ boards: docs, count: number });
   });
 };
 
@@ -133,7 +118,6 @@ const getUpgrade = (req, res) => {
 
 module.exports.boardsPage = boardsPage;
 module.exports.getBoards = getBoards;
-module.exports.getSharedBoards = getSharedBoards;
 module.exports.makeBoard = makeBoard;
 module.exports.deleteBoard = deleteBoard;
 module.exports.getUpgrade = getUpgrade;
