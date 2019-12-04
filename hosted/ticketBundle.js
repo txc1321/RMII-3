@@ -1,7 +1,5 @@
 'use strict';
 
-var globalToken = {};
-
 var handleTicket = function handleTicket(e) {
   e.preventDefault();
 
@@ -275,6 +273,12 @@ var TicketList = function TicketList(props) {
             5 - index
           ),
           tickets.map(function (ticket, index) {
+            var date = new Date(ticket.dueDate);
+            var day = date.getDate();
+            var month = date.getMonth();
+            var year = date.getFullYear();
+
+            var fullDate = month + 1 + '/' + (day + 1) + '/' + year;
             return React.createElement(
               'div',
               { className: 'ticket', id: ticket._id },
@@ -294,7 +298,7 @@ var TicketList = function TicketList(props) {
                 'h3',
                 { className: 'ticketDueDate' },
                 'Due Date: ',
-                ticket.dueDate
+                fullDate
               ),
               React.createElement(
                 'h3',

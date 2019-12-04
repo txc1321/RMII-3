@@ -91,7 +91,7 @@ const groupTickets = (req, res) => {
       // adds priority arrays with adjusted index
       priorityTickets.tickets.push(sortStruct.tickets[i - 1]);
     }
-    return res.json({ priorities: priorityTickets, boardID });
+    return res.json({ priorities: priorityTickets, boardID, csrfToken: req.csrfToken() });
   });
 };
 

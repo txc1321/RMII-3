@@ -1,5 +1,3 @@
-const globalToken = {};
-
 const handleTicket = (e) => {
   e.preventDefault();
 
@@ -121,7 +119,6 @@ const handleCommentForm = (ID) => {
         <CommentBlank />, document.querySelector("#commentsForm" + ID)
       );
   }
-
 };
 
 const CommentForm = (props) => {
@@ -257,11 +254,17 @@ const TicketList = function(props) {
             <h3>Priority: {5-index}</h3>
             {
               tickets.map((ticket, index) => {
+                const date = new Date(ticket.dueDate);
+                const day = date.getDate();
+                const month = date.getMonth();
+                const year = date.getFullYear();
+
+                const fullDate = `${month + 1}/${day + 1}/${year}`;
                 return(
                   <div className="ticket" id={ticket._id}>
                     <h3 className="ticketTitle">Title: {ticket.title}</h3>
                     <h3 className="ticketPriority">Priority: {ticket.priority}</h3>
-                    <h3 className="ticketDueDate">Due Date: {ticket.dueDate}</h3>
+                    <h3 className="ticketDueDate">Due Date: {fullDate}</h3>
                     <h3 className="ticketDesc">Description: {ticket.description}</h3>
                     <button id={"ticketDelete" + index}
                                      name={"ticketDelete" + index}
