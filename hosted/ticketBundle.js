@@ -99,11 +99,11 @@ var CommentForm = function CommentForm(props) {
       onSubmit: handleComment,
       action: '/addComment',
       method: 'POST',
-      className: 'ticketForm' },
+      className: 'commentForm' },
     React.createElement(
       'div',
       { className: 'row' },
-      React.createElement('input', { id: "comment" + props.id, className: 'formInput', type: 'text', name: 'comment',
+      React.createElement('input', { id: "comment" + props.id, className: 'commentFormInput', type: 'text', name: 'comment',
         placeholder: 'comment' })
     ),
     React.createElement(
@@ -112,7 +112,7 @@ var CommentForm = function CommentForm(props) {
       React.createElement('input', { type: 'hidden', name: 'ticketID', value: props.id }),
       React.createElement('input', { type: 'hidden', name: 'boardID', value: props.boardID }),
       React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
-      React.createElement('input', { className: 'formSubmit', type: 'submit', value: 'Comment' })
+      React.createElement('input', { className: 'commentFormSubmit', type: 'submit', value: 'Comment' })
     )
   );
 };
@@ -146,7 +146,7 @@ var EditTicketForm = function EditTicketForm(props) {
           placeholder: 'Description' }),
         React.createElement('input', { type: 'hidden', name: 'id', value: props.id }),
         React.createElement('input', { type: 'hidden', name: 'boardID', value: props.boardID }),
-        React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
+        React.createElement('input', { type: 'hidden', id: 'globalCSRF', name: '_csrf', value: props.csrf }),
         React.createElement('input', { className: 'formSubmit', type: 'submit', value: 'Edit Ticket' })
       )
     )
@@ -201,10 +201,9 @@ var CommentList = function CommentList(props) {
     );
   } else {
     var commentNodes = props.comments.map(function (comment, index) {
-      console.log(comment);
       return React.createElement(
         'li',
-        { id: "comment" + index },
+        { className: 'comment', id: "comment" + index },
         comment.comment,
         React.createElement(
           'button',
@@ -213,8 +212,8 @@ var CommentList = function CommentList(props) {
             onClick: function onClick() {
               return handleDeleteComment(comment._id, comment.ticketID);
             },
-            className: 'formSubmit' },
-          'X'
+            className: 'commentDelete' },
+          'x'
         )
       );
     });
@@ -289,7 +288,7 @@ var TicketList = function TicketList(props) {
                   onClick: function onClick() {
                     return handleDelete(ticket._id, ticket.boardID);
                   },
-                  className: 'formSubmit' },
+                  className: 'commentFormSubmit' },
                 'X'
               ),
               React.createElement(
@@ -299,7 +298,7 @@ var TicketList = function TicketList(props) {
                   onClick: function onClick() {
                     return handleEditForm(ticket._id, ticket.boardID);
                   },
-                  className: 'formSubmit' },
+                  className: 'commentFormSubmit' },
                 'Edit'
               ),
               React.createElement(
@@ -309,7 +308,7 @@ var TicketList = function TicketList(props) {
                   onClick: function onClick() {
                     return handleCommentForm(ticket._id);
                   },
-                  className: 'formSubmit' },
+                  className: 'commentFormSubmit' },
                 'Comments'
               ),
               React.createElement('section', { id: "comments" + ticket._id }),
@@ -353,19 +352,17 @@ var loadTicketsFromServer = function loadTicketsFromServer() {
 };
 
 var handleCommentListener = function handleCommentListener(ID) {
-  console.log('#' + ID + " form");
   $('#' + ID + " form").on("submit", function (event) {
-    console.log('We made it here');
+    $(undefined + " input[type=text]").each(function () {
+      if ($(undefined).val() == '') {
+        handleError('You must make a comment');
+        return false;
+      }
+    });
+
     event.preventDefault();
     var form = $(undefined);
 
-    if ($('#comment' + ID).val() === '') {
-      handleError('You must make a comment');
-      return false;
-    }
-
-    console.log($('#commentform' + ID));
-    console.log($('#commentform' + ID).attr('action'));
     sendAjax('POST', $(form).attr('action'), $(form).serialize(), function () {
       loadCommentsFromServer(ID);
     });

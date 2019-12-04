@@ -42,11 +42,7 @@ const makeComment = (req, res) => {
     ticketID: req.body.ticketID,
     owner: req.session.account._id,
   };
-
-  console.log(req.body);
-  console.log(CommentData);
-
-
+  
   const newComment = new Comment.CommentModel(CommentData);
 
   const commentPromise = newComment.save();

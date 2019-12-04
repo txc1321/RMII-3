@@ -65,7 +65,29 @@ nav:nth-child(1) {
     color: white;
     background-color: #00aeff;
 }
+.commentFormSubmit{
+    margin-top: 25px;
+    padding: 5px 10px 5px 10px;
+    color: black;
+    background-color: white;
+    text-decoration: none;
+    border: 2px solid #00aeff;
+    border-radius: 5px;
+    transition: background-color 0.4s ease;
+}
+.commentFormSubmit:hover{
+    color: white;
+    background-color: #00aeff;
+}
 .formInput{
+    margin: 0 .25rem;
+    min-width: 125px;
+    border: 1px solid #eee;
+    border-left: 3px solid #00aeff;
+    border-radius: 5px;
+    transition: border-color .5s ease-out;
+}
+.commentFormInput{
     margin: 0 .25rem;
     min-width: 125px;
     border: 1px solid #eee;
@@ -110,6 +132,7 @@ nav:nth-child(1) {
     margin: 80px 1% 0.5% 0.5%;
     text-align: center;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 .ticketFunctionForm{
     margin-top: -25px;
@@ -146,6 +169,30 @@ nav:nth-child(1) {
 }
 #ticketDesc{
     width: 69.5%;
+}
+
+.commentForm{
+    margin-left: 30%;
+    width: auto;
+}
+.commentDelete{
+    margin-left: 10px;
+    color: black;
+    background-color: white;
+    text-decoration: none;
+    border: 2px solid #00aeff;
+    border-radius: 5px;
+    transition: background-color 0.4s ease;
+}
+.commentDelete:hover{
+    color: white;
+    background-color: #00aeff;
+}
+.comment{
+    margin-top: 10px;
+}
+#comments{
+    list-style-type:none;
 }
 
 #boards{

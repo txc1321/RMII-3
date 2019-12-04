@@ -108,16 +108,16 @@ const CommentForm = (props) => {
           onSubmit={handleComment}
           action="/addComment"
           method="POST"
-          className="ticketForm">
+          className="commentForm">
       <div className="row">
-        <input id={"comment"+props.id} className="formInput" type="text" name="comment"
+        <input id={"comment"+props.id} className="commentFormInput" type="text" name="comment"
                placeholder="comment"/>
       </div>
       <div className="row">
         <input type="hidden" name="ticketID" value={props.id}/>
         <input type="hidden" name="boardID" value={props.boardID}/>
         <input type="hidden" name="_csrf" value={props.csrf}/>
-        <input className="formSubmit" type="submit" value="Comment"/>
+        <input className="commentFormSubmit" type="submit" value="Comment"/>
       </div>
     </form>
   );
@@ -145,7 +145,7 @@ const EditTicketForm = (props) => {
                  placeholder="Description"/>
           <input type="hidden" name="id" value={props.id}/>
           <input type="hidden" name="boardID" value={props.boardID}/>
-          <input type="hidden" name="_csrf" value={props.csrf}/>
+          <input type="hidden" id="globalCSRF" name="_csrf" value={props.csrf}/>
           <input className="formSubmit" type="submit" value="Edit Ticket"/>
         </div>
       </form>
@@ -192,14 +192,13 @@ const CommentList = function(props) {
   }
   else {
     const commentNodes = props.comments.map(function (comment, index) {
-      console.log(comment);
       return (
-        <li id={"comment"+index}>{comment.comment}
+        <li className="comment" id={"comment"+index}>{comment.comment}
           <button id={"commentDelete" + index}
                   name={"commentDelete" + index}
                   onClick={() => handleDeleteComment(comment._id, comment.ticketID)}
-                  className="formSubmit">
-            X
+                  className="commentDelete">
+            x
           </button>
         </li>
       );
@@ -244,19 +243,19 @@ const TicketList = function(props) {
                     <button id={"ticketDelete" + index}
                                      name={"ticketDelete" + index}
                                      onClick={() => handleDelete(ticket._id, ticket.boardID)}
-                                     className="formSubmit">
+                                     className="commentFormSubmit">
                     X
                   </button>
                     <button id={"ticketEdit" + index}
                             name={"ticketEdit" + index}
                             onClick={() => handleEditForm(ticket._id, ticket.boardID)}
-                            className="formSubmit">
+                            className="commentFormSubmit">
                       Edit
                     </button>
                     <button id={"ticketComments" + index}
                             name={"ticketComments" + index}
                             onClick={() => handleCommentForm(ticket._id)}
-                            className="formSubmit">
+                            className="commentFormSubmit">
                       Comments
                     </button>
                     <section id={"comments" + ticket._id}></section>
@@ -298,23 +297,21 @@ const loadTicketsFromServer = () => {
 };
 
 const handleCommentListener = (ID) => {
-  console.log('#' + ID + " form");
   $('#' + ID + " form").on("submit", (event) => {
-    console.log('We made it here');
+    $(this + " input[type=text]").each(() => {
+      if($(this).val() == ''){
+        handleError('You must make a comment');
+        return false;
+      }
+    })
+
     event.preventDefault();
     const form = $(this);
 
-    if ($('#comment' + ID).val() === '') {
-      handleError('You must make a comment');
-      return false;
-    }
-
-    console.log($('#commentform' + ID));
-    console.log($('#commentform' + ID).attr('action'));
     sendAjax('POST', $(form).attr('action'), $(form).serialize(), function() {
       loadCommentsFromServer(ID);
     });
-
+    
     loadCommentsFromServer(ID);
   })
 }
