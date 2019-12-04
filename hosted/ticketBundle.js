@@ -58,8 +58,29 @@ var handleEditForm = function handleEditForm(ID, boardID) {
 };
 
 var handleComment = function handleComment(e) {
-  var ID = e.currentTarget.id.value;
-  handleCommentListener(ID);
+  e.preventDefault();
+  var ID = e.currentTarget.parentElement.parentElement.id;
+  if (document.querySelector('#comment' + ID).value == '') {
+    handleError('You must make a comment');
+    return false;
+  } else {
+    var form = e.currentTarget;
+    var action = form.action;
+    var comment = document.querySelector('#' + form.id + ' input[name=comment]').value;
+    var ticketID = document.querySelector('#' + form.id + ' input[name=ticketID]').value;
+    var boardID = document.querySelector('#' + form.id + ' input[name=boardID]').value;
+    var csrf = document.querySelector('#' + form.id + ' input[name=_csrf]').value;
+    var data = {
+      comment: comment,
+      ticketID: ticketID,
+      boardID: boardID,
+      _csrf: csrf
+    };
+    sendAjax('POST', action, data, function () {
+      loadCommentsFromServer(ID);
+    });
+    loadCommentsFromServer(ID);
+  }
 };
 
 var handleDeleteComment = function handleDeleteComment(ID, ticketID) {
@@ -96,9 +117,9 @@ var CommentForm = function CommentForm(props) {
     'form',
     { id: "commentForm" + props.id,
       name: 'commentForm',
-      onSubmit: handleComment,
       action: '/addComment',
       method: 'POST',
+      onSubmit: handleComment,
       className: 'commentForm' },
     React.createElement(
       'div',
@@ -352,20 +373,8 @@ var loadTicketsFromServer = function loadTicketsFromServer() {
 };
 
 var handleCommentListener = function handleCommentListener(ID) {
-  $('#' + ID + " form").on("submit", function (event) {
-    $(undefined + " input[type=text]").each(function () {
-      if ($(undefined).val() == '') {
-        handleError('You must make a comment');
-        return false;
-      }
-    });
-
-    event.preventDefault();
+  $('#' + ID + " form").on("submit", function () {
     var form = $(undefined);
-
-    sendAjax('POST', $(form).attr('action'), $(form).serialize(), function () {
-      loadCommentsFromServer(ID);
-    });
 
     loadCommentsFromServer(ID);
   });

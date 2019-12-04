@@ -63,8 +63,30 @@ const handleEditForm = (ID, boardID) => {
 };
 
 const handleComment = (e) => {
-  const ID = e.currentTarget.id.value;
-  handleCommentListener(ID);
+  e.preventDefault();
+  const ID = e.currentTarget.parentElement.parentElement.id;
+  if(document.querySelector('#comment' + ID).value == ''){
+    handleError('You must make a comment');
+    return false;
+  }
+  else{
+    const form = e.currentTarget;
+    const action = form.action;
+    const comment = document.querySelector('#' + form.id + ' input[name=comment]').value;
+    const ticketID = document.querySelector('#' + form.id + ' input[name=ticketID]').value;
+    const boardID = document.querySelector('#' + form.id + ' input[name=boardID]').value;
+    const csrf = document.querySelector('#' + form.id + ' input[name=_csrf]').value;
+    const data = {
+      comment,
+      ticketID,
+      boardID,
+      _csrf: csrf,
+    };
+    sendAjax('POST', action, data, function() {
+      loadCommentsFromServer(ID);
+    });
+    loadCommentsFromServer(ID);
+  }
 };
 
 const handleDeleteComment = (ID, ticketID) => {
@@ -99,15 +121,16 @@ const handleCommentForm = (ID) => {
         <CommentBlank />, document.querySelector("#commentsForm" + ID)
       );
   }
+
 };
 
 const CommentForm = (props) => {
   return(
     <form id={"commentForm" + props.id}
           name="commentForm"
-          onSubmit={handleComment}
           action="/addComment"
           method="POST"
+          onSubmit={handleComment}
           className="commentForm">
       <div className="row">
         <input id={"comment"+props.id} className="commentFormInput" type="text" name="comment"
@@ -216,7 +239,7 @@ const CommentBlank = function() {
   return(
     <div></div>
   );
-}
+};
 
 const TicketList = function(props) {
   if(!props.priorities.tickets) {
@@ -297,24 +320,14 @@ const loadTicketsFromServer = () => {
 };
 
 const handleCommentListener = (ID) => {
-  $('#' + ID + " form").on("submit", (event) => {
-    $(this + " input[type=text]").each(() => {
-      if($(this).val() == ''){
-        handleError('You must make a comment');
-        return false;
-      }
-    })
-
-    event.preventDefault();
+  $('#' + ID + " form").on("submit", () => {
     const form = $(this);
 
-    sendAjax('POST', $(form).attr('action'), $(form).serialize(), function() {
-      loadCommentsFromServer(ID);
-    });
-    
+
+
     loadCommentsFromServer(ID);
   })
-}
+};
 
 const loadCommentsFromServer = (ID) => {
   const token = document.querySelector('#globalCSRF').value;

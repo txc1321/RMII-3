@@ -42,7 +42,7 @@ const makeComment = (req, res) => {
     ticketID: req.body.ticketID,
     owner: req.session.account._id,
   };
-  
+
   const newComment = new Comment.CommentModel(CommentData);
 
   const commentPromise = newComment.save();
@@ -71,9 +71,7 @@ const makeComment = (req, res) => {
 
     return false;
   });
-  ticketPromise.then(() => {
-    res.redirect(`/tickets?id=${req.body.boardID}`);
-  });
+  ticketPromise.then(() => false);
   ticketPromise.catch((err) => {
     console.log(err);
 
