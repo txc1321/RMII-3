@@ -28,9 +28,6 @@ const AccountSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  sharedBoards : {
-    type: Array,
-  }
 });
 // send model data to API
 AccountSchema.statics.toAPI = doc => ({

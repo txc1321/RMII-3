@@ -298,23 +298,22 @@ const loadTicketsFromServer = () => {
 
 const handleCommentListener = (ID) => {
   $('#' + ID + " form").on("submit", (event) => {
-    $(this + " input[type=text]").each(() => {
-      if($(this).val() == ''){
+    event.preventDefault();
+    const form = $(this);
+    $('#' + ID + ' form.commentFormInput').each(() => {
+      if($(this).val().length != 0){
+        sendAjax('POST', $(form).attr('action'), $(form).serialize(), function() {
+          loadCommentsFromServer(ID);
+        });
+        loadCommentsFromServer(ID);
+      }
+      else{
         handleError('You must make a comment');
         return false;
       }
     })
-
-    event.preventDefault();
-    const form = $(this);
-
-    sendAjax('POST', $(form).attr('action'), $(form).serialize(), function() {
-      loadCommentsFromServer(ID);
-    });
-    
-    loadCommentsFromServer(ID);
-  })
-}
+  });
+};
 
 const loadCommentsFromServer = (ID) => {
   const token = document.querySelector('#globalCSRF').value;

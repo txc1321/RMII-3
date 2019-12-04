@@ -21,7 +21,6 @@ const router = (app) => {
   app.post('/makeTicket', mid.requiresLogin, controllers.Ticket.makeTicket);
   app.post('/editTicket', mid.requiresLogin, controllers.Ticket.editTicket);
   app.post('/makeBoard', mid.requiresLogin, controllers.Board.makeBoard);
-  // app.post('/shareBoard', mid.requiresLogin, controllers.Account.addSharedBoard);
   app.post('/addComment', mid.requiresLogin, controllers.Comment.makeComment);
   app.delete('/resolveTicket', mid.requiresLogin, controllers.Ticket.resolveTicket);
   app.delete('/deleteBoard', mid.requiresLogin, controllers.Board.deleteBoard);

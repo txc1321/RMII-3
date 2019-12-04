@@ -353,21 +353,19 @@ var loadTicketsFromServer = function loadTicketsFromServer() {
 
 var handleCommentListener = function handleCommentListener(ID) {
   $('#' + ID + " form").on("submit", function (event) {
-    $(undefined + " input[type=text]").each(function () {
-      if ($(undefined).val() == '') {
+    event.preventDefault();
+    var form = $(undefined);
+    $('#' + ID + ' form.commentFormInput').each(function () {
+      if ($(undefined).val().length != 0) {
+        sendAjax('POST', $(form).attr('action'), $(form).serialize(), function () {
+          loadCommentsFromServer(ID);
+        });
+        loadCommentsFromServer(ID);
+      } else {
         handleError('You must make a comment');
         return false;
       }
     });
-
-    event.preventDefault();
-    var form = $(undefined);
-
-    sendAjax('POST', $(form).attr('action'), $(form).serialize(), function () {
-      loadCommentsFromServer(ID);
-    });
-
-    loadCommentsFromServer(ID);
   });
 };
 
