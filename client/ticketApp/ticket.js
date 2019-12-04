@@ -63,33 +63,19 @@ const handleEditForm = (ID, boardID) => {
 };
 
 const handleComment = (e) => {
-  e.preventDefault();
-
   const ID = e.currentTarget.id.value;
-
-  if ($('#comment').val() === '') {
-    handleError('You must make a comment');
-    return false;
-  }
-
-  console.log($('#commentform' + ID));
-  console.log($('#commentform' + ID).attr('action'));
-  sendAjax('POST', $('#commentform' + ID).attr('action'), $('#commentform' + ID).serialize(), function() {
-    loadCommentsFromServer(ID);
-  });
-
-  return false;
+  handleCommentListener(ID);
 };
 
-const handleDeleteComment = (ID) => {
+const handleDeleteComment = (ID, ticketID) => {
   sendAjax('GET', '/getToken', null, (result) => {
     sendDelete(result.csrfToken);
   });
 
   const sendDelete = (token) => {
-    const data = "ticketID=" + ID +"&_csrf=" + token;
-    sendAjax('DELETE', '/removeComment', data, function() {
-      loadCommentsFromServer(ID);
+    const data = "id=" + ID + "&ticketID=" + ticketID + "&_csrf=" + token;
+    sendAjax('DELETE', '/deleteComment', data, function() {
+      loadCommentsFromServer(ticketID);
     });
   };
 
@@ -109,6 +95,9 @@ const handleCommentForm = (ID) => {
       ReactDOM.render(
         <CommentBlank />, document.querySelector("#comments" + ID)
       );
+      ReactDOM.render(
+        <CommentBlank />, document.querySelector("#commentsForm" + ID)
+      );
   }
 };
 
@@ -121,11 +110,12 @@ const CommentForm = (props) => {
           method="POST"
           className="ticketForm">
       <div className="row">
-        <input id="comment" className="formInput" type="text" name="comment"
+        <input id={"comment"+props.id} className="formInput" type="text" name="comment"
                placeholder="comment"/>
       </div>
       <div className="row">
-        <input type="hidden" name="id" value={props.id}/>
+        <input type="hidden" name="ticketID" value={props.id}/>
+        <input type="hidden" name="boardID" value={props.boardID}/>
         <input type="hidden" name="_csrf" value={props.csrf}/>
         <input className="formSubmit" type="submit" value="Comment"/>
       </div>
@@ -202,8 +192,9 @@ const CommentList = function(props) {
   }
   else {
     const commentNodes = props.comments.map(function (comment, index) {
+      console.log(comment);
       return (
-        <li id={comment.comment}>{comment.comment}
+        <li id={"comment"+index}>{comment.comment}
           <button id={"commentDelete" + index}
                   name={"commentDelete" + index}
                   onClick={() => handleDeleteComment(comment._id, comment.ticketID)}
@@ -269,6 +260,7 @@ const TicketList = function(props) {
                       Comments
                     </button>
                     <section id={"comments" + ticket._id}></section>
+                    <section id={"commentsForm" + ticket._id}></section>
                   </div>
                 );
               })
@@ -293,7 +285,8 @@ const TicketList = function(props) {
 };
 
 const loadTicketsFromServer = () => {
-  let boardID = window.location.search.substring(4);
+  const boardID = window.location.search.substring(4);
+
   sendAjax('GET', `/getTickets?id=${boardID}`, null, (data) => {
     ReactDOM.render(
       <TicketList priorities={data.priorities} boardID={data.boardID} />, document.querySelector("#tickets")
@@ -304,14 +297,38 @@ const loadTicketsFromServer = () => {
   });
 };
 
+const handleCommentListener = (ID) => {
+  console.log('#' + ID + " form");
+  $('#' + ID + " form").on("submit", (event) => {
+    console.log('We made it here');
+    event.preventDefault();
+    const form = $(this);
+
+    if ($('#comment' + ID).val() === '') {
+      handleError('You must make a comment');
+      return false;
+    }
+
+    console.log($('#commentform' + ID));
+    console.log($('#commentform' + ID).attr('action'));
+    sendAjax('POST', $(form).attr('action'), $(form).serialize(), function() {
+      loadCommentsFromServer(ID);
+    });
+
+    loadCommentsFromServer(ID);
+  })
+}
+
 const loadCommentsFromServer = (ID) => {
   const token = document.querySelector('#globalCSRF').value;
-  sendAjax('GET', '/getComments', null, (data) => {
+  const boardID = window.location.search.substring(4);
+
+  sendAjax('GET', `/getComments?id=${ID}`, null, (data) => {
     ReactDOM.render(
       <CommentList comments={data.comments} />, document.querySelector("#comments" + ID)
     );
     ReactDOM.render(
-      <CommentForm csrf={token} id={ID} />, document.querySelector("#comments" + ID)
+      <CommentForm csrf={token} id={ID} boardID={boardID} />, document.querySelector("#commentsForm" + ID)
     );
   });
 };

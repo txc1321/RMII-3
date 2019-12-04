@@ -30,6 +30,7 @@ const CommentSchema = new mongoose.Schema({
 // send ticket data to API
 CommentSchema.statics.toAPI = (doc) => ({
   comment: doc.comment,
+  ticketID: doc.ticketID,
 });
 
 // find ticket by owner and board data
@@ -39,10 +40,10 @@ CommentSchema.statics.findByOwnerAndTicket = (ownerID, ticketID, callback) => {
     ticketID,
   };
 
-  return CommentModel.find(search).select('comment').exec(callback);
+  return CommentModel.find(search).select('comment ticketID').exec(callback);
 };
 
-CommentModel = mongoose.model('Ticket ticketID', CommentSchema);
+CommentModel = mongoose.model('Comment', CommentSchema);
 
 module.exports.CommentModel = CommentModel;
 module.exports.CommentSchema = CommentSchema;

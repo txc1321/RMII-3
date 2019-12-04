@@ -6,7 +6,7 @@ const Ticket = models.Ticket;
 // sort tickets by priority function
 const getComments = (req, res) => {
   // grabs board ID from url
-  const ticketID = req.body.id;
+  const ticketID = req.query.id;
   // array for ticket manipulation
   let allComments = [];
   // promise that finds tickets based on owner and board
@@ -43,6 +43,10 @@ const makeComment = (req, res) => {
     owner: req.session.account._id,
   };
 
+  console.log(req.body);
+  console.log(CommentData);
+
+
   const newComment = new Comment.CommentModel(CommentData);
 
   const commentPromise = newComment.save();
@@ -57,7 +61,7 @@ const makeComment = (req, res) => {
   });
 
   // grab board id from form and find the specific board
-  const search = { _id: req.body.id };
+  const search = { _id: req.body.ticketID };
   const ticketPromise = Ticket.TicketModel.findOne(search, (err, docs) => {
     if (err) {
       return res.status(400).json({ error: 'An error occurred' });
@@ -66,12 +70,14 @@ const makeComment = (req, res) => {
     // add new ticket to board tickets list
     newComments.push(commentPromise);
     const allComments = docs.comments.concat(newComments);
-    docs.tickets.splice(0, docs.comments.length, ...allComments);
+    docs.comments.splice(0, docs.comments.length, ...allComments);
     docs.save();
 
     return false;
   });
-  ticketPromise.then(() => false);
+  ticketPromise.then(() => {
+    res.redirect(`/tickets?id=${req.body.boardID}`);
+  });
   ticketPromise.catch((err) => {
     console.log(err);
 
@@ -88,7 +94,7 @@ const deleteComment = (request, response) => {
   let index;
 
   // remove from ticket
-  const ticketPromise = Ticket.TicketModel.findOne({ _id: req.body.id }, (err, docs) => {
+  const ticketPromise = Ticket.TicketModel.findOne({ _id: req.body.ticketID }, (err, docs) => {
     if (err) {
       return res.status(400).json({ error: 'An error occurred' });
     }
@@ -101,7 +107,7 @@ const deleteComment = (request, response) => {
     }
 
     // removes ticket from board list
-    docs.tickets.splice(index, 1);
+    docs.comments.splice(index, 1);
     docs.save();
 
     return false;

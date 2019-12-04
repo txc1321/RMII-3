@@ -58,33 +58,19 @@ var handleEditForm = function handleEditForm(ID, boardID) {
 };
 
 var handleComment = function handleComment(e) {
-  e.preventDefault();
-
   var ID = e.currentTarget.id.value;
-
-  if ($('#comment').val() === '') {
-    handleError('You must make a comment');
-    return false;
-  }
-
-  console.log($('#commentform' + ID));
-  console.log($('#commentform' + ID).attr('action'));
-  sendAjax('POST', $('#commentform' + ID).attr('action'), $('#commentform' + ID).serialize(), function () {
-    loadCommentsFromServer(ID);
-  });
-
-  return false;
+  handleCommentListener(ID);
 };
 
-var handleDeleteComment = function handleDeleteComment(ID) {
+var handleDeleteComment = function handleDeleteComment(ID, ticketID) {
   sendAjax('GET', '/getToken', null, function (result) {
     sendDelete(result.csrfToken);
   });
 
   var sendDelete = function sendDelete(token) {
-    var data = "ticketID=" + ID + "&_csrf=" + token;
-    sendAjax('DELETE', '/removeComment', data, function () {
-      loadCommentsFromServer(ID);
+    var data = "id=" + ID + "&ticketID=" + ticketID + "&_csrf=" + token;
+    sendAjax('DELETE', '/deleteComment', data, function () {
+      loadCommentsFromServer(ticketID);
     });
   };
 
@@ -101,6 +87,7 @@ var handleCommentForm = function handleCommentForm(ID) {
     loadCommentsFromServer(ID);
   } else {
     ReactDOM.render(React.createElement(CommentBlank, null), document.querySelector("#comments" + ID));
+    ReactDOM.render(React.createElement(CommentBlank, null), document.querySelector("#commentsForm" + ID));
   }
 };
 
@@ -116,13 +103,14 @@ var CommentForm = function CommentForm(props) {
     React.createElement(
       'div',
       { className: 'row' },
-      React.createElement('input', { id: 'comment', className: 'formInput', type: 'text', name: 'comment',
+      React.createElement('input', { id: "comment" + props.id, className: 'formInput', type: 'text', name: 'comment',
         placeholder: 'comment' })
     ),
     React.createElement(
       'div',
       { className: 'row' },
-      React.createElement('input', { type: 'hidden', name: 'id', value: props.id }),
+      React.createElement('input', { type: 'hidden', name: 'ticketID', value: props.id }),
+      React.createElement('input', { type: 'hidden', name: 'boardID', value: props.boardID }),
       React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
       React.createElement('input', { className: 'formSubmit', type: 'submit', value: 'Comment' })
     )
@@ -213,9 +201,10 @@ var CommentList = function CommentList(props) {
     );
   } else {
     var commentNodes = props.comments.map(function (comment, index) {
+      console.log(comment);
       return React.createElement(
         'li',
-        { id: comment.comment },
+        { id: "comment" + index },
         comment.comment,
         React.createElement(
           'button',
@@ -323,7 +312,8 @@ var TicketList = function TicketList(props) {
                   className: 'formSubmit' },
                 'Comments'
               ),
-              React.createElement('section', { id: "comments" + ticket._id })
+              React.createElement('section', { id: "comments" + ticket._id }),
+              React.createElement('section', { id: "commentsForm" + ticket._id })
             );
           })
         );
@@ -355,17 +345,42 @@ var TicketList = function TicketList(props) {
 
 var loadTicketsFromServer = function loadTicketsFromServer() {
   var boardID = window.location.search.substring(4);
+
   sendAjax('GET', '/getTickets?id=' + boardID, null, function (data) {
     ReactDOM.render(React.createElement(TicketList, { priorities: data.priorities, boardID: data.boardID }), document.querySelector("#tickets"));
     ReactDOM.render(React.createElement(TicketForm, { csrf: data.csrfToken, boardID: data.boardID }), document.querySelector("#makeTicket"));
   });
 };
 
+var handleCommentListener = function handleCommentListener(ID) {
+  console.log('#' + ID + " form");
+  $('#' + ID + " form").on("submit", function (event) {
+    console.log('We made it here');
+    event.preventDefault();
+    var form = $(undefined);
+
+    if ($('#comment' + ID).val() === '') {
+      handleError('You must make a comment');
+      return false;
+    }
+
+    console.log($('#commentform' + ID));
+    console.log($('#commentform' + ID).attr('action'));
+    sendAjax('POST', $(form).attr('action'), $(form).serialize(), function () {
+      loadCommentsFromServer(ID);
+    });
+
+    loadCommentsFromServer(ID);
+  });
+};
+
 var loadCommentsFromServer = function loadCommentsFromServer(ID) {
   var token = document.querySelector('#globalCSRF').value;
-  sendAjax('GET', '/getComments', null, function (data) {
+  var boardID = window.location.search.substring(4);
+
+  sendAjax('GET', '/getComments?id=' + ID, null, function (data) {
     ReactDOM.render(React.createElement(CommentList, { comments: data.comments }), document.querySelector("#comments" + ID));
-    ReactDOM.render(React.createElement(CommentForm, { csrf: token, id: ID }), document.querySelector("#comments" + ID));
+    ReactDOM.render(React.createElement(CommentForm, { csrf: token, id: ID, boardID: boardID }), document.querySelector("#commentsForm" + ID));
   });
 };
 
