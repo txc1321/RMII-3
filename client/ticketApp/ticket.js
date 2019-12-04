@@ -319,16 +319,6 @@ const loadTicketsFromServer = () => {
   });
 };
 
-const handleCommentListener = (ID) => {
-  $('#' + ID + " form").on("submit", () => {
-    const form = $(this);
-
-
-
-    loadCommentsFromServer(ID);
-  })
-};
-
 const loadCommentsFromServer = (ID) => {
   const token = document.querySelector('#globalCSRF').value;
   const boardID = window.location.search.substring(4);

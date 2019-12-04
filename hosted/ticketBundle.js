@@ -372,14 +372,6 @@ var loadTicketsFromServer = function loadTicketsFromServer() {
   });
 };
 
-var handleCommentListener = function handleCommentListener(ID) {
-  $('#' + ID + " form").on("submit", function () {
-    var form = $(undefined);
-
-    loadCommentsFromServer(ID);
-  });
-};
-
 var loadCommentsFromServer = function loadCommentsFromServer(ID) {
   var token = document.querySelector('#globalCSRF').value;
   var boardID = window.location.search.substring(4);
