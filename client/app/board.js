@@ -124,10 +124,64 @@ const BoardList = function(props) {
   );
 };
 
+const SharedBoardList = function(props) {
+  if(props.boards.length === 0){
+    return(
+      <div></div>
+    );
+  }
+
+  const sharedBoardNodes = props.boards.map(function(board, index){
+    if (board.tickets) {
+      return (
+        <div key={board._id} className="board">
+          <h4 className="boardLabel">Name: {board.name}</h4>
+          <h4 className="boardLabel">Tickets: {board.tickets.length}</h4>
+          <div class="boardInfo">
+            <a href={"/tickets?id=" + board._id}>
+              <button id={"boardNav" + index}
+                    name={"boardNav" + index}
+                    className="formSubmit">
+                View
+              </button>
+            </a>
+          </div>
+        </div>
+      );
+    }
+    else{
+      return (
+        <div key={board._id} className="board">
+          <h4 className="boardLabel">Name: {board.name}</h4>
+          <h4 className="boardLabel">Tickets: None</h4>
+          <div class="boardInfo">
+            <a href={"/tickets?id=" + board._id}>
+              <button id={"boardNav" + index}
+                      name={"boardNav" + index}
+                      className="formSubmit">
+                View
+              </button>
+            </a>
+          </div>
+        </div>
+      );
+    }
+  });
+
+  return(
+    <div>
+      {sharedBoardNodes}
+    </div>
+  );
+};
+
 const loadBoardsFromServer = () => {
   sendAjax('GET', '/getBoards', null, (data) => {
     ReactDOM.render(
       <BoardList boards={data.boards} count={data.count} />, document.querySelector("#boards")
+    );
+    ReactDOM.render(
+      <SharedBoardList boards={data.sharedBoards}/>, document.querySelector("#sharedBoards")
     );
     ReactDOM.render(
       <BoardForm csrf={data.csrfToken} count={data.count} />, document.querySelector("#makeBoard")

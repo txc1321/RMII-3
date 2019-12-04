@@ -43,6 +43,14 @@ CommentSchema.statics.findByOwnerAndTicket = (ownerID, ticketID, callback) => {
   return CommentModel.find(search).select('comment ticketID').exec(callback);
 };
 
+CommentSchema.statics.findByID = (ID, callback) => {
+  const search = {
+    _id: ID,
+  };
+
+  return CommentModel.find(search).select('comment ticketID').exec(callback);
+};
+
 CommentModel = mongoose.model('Comment', CommentSchema);
 
 module.exports.CommentModel = CommentModel;

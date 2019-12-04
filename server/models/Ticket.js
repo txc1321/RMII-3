@@ -68,6 +68,16 @@ TicketSchema.statics.findByOwnerandBoard = (ownerID, boardID, callback) => {
   .exec(callback);
 };
 
+TicketSchema.statics.findByID = (ID, callback) => {
+  const search = {
+    _id: ID,
+  };
+
+  return TicketModel.find(search)
+  .select('title description priority dueDate boardID')
+  .exec(callback);
+};
+
 TicketModel = mongoose.model('Ticket', TicketSchema);
 
 module.exports.TicketModel = TicketModel;

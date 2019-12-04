@@ -28,12 +28,16 @@ const AccountSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  sharedBoards : {
+    type: Array,
+  }
 });
 // send model data to API
 AccountSchema.statics.toAPI = doc => ({
   // _id is built into your mongo document and is guaranteed to be unique
   username: doc.username,
   _id: doc._id,
+  sharedBoards: doc.sharedBoards,
 });
 
 // check for password validation function
@@ -52,6 +56,15 @@ const validatePassword = (doc, password, callback) => {
 AccountSchema.statics.findByUsername = (name, callback) => {
   const search = {
     username: name,
+  };
+
+  return AccountModel.findOne(search, callback);
+};
+
+// find account by username
+AccountSchema.statics.findByID = (ID, callback) => {
+  const search = {
+    _id: ID,
   };
 
   return AccountModel.findOne(search, callback);

@@ -192,9 +192,89 @@ var BoardList = function BoardList(props) {
   );
 };
 
+var SharedBoardList = function SharedBoardList(props) {
+  if (props.boards.length === 0) {
+    return React.createElement('div', null);
+  }
+
+  var sharedBoardNodes = props.boards.map(function (board, index) {
+    if (board.tickets) {
+      return React.createElement(
+        'div',
+        { key: board._id, className: 'board' },
+        React.createElement(
+          'h4',
+          { className: 'boardLabel' },
+          'Name: ',
+          board.name
+        ),
+        React.createElement(
+          'h4',
+          { className: 'boardLabel' },
+          'Tickets: ',
+          board.tickets.length
+        ),
+        React.createElement(
+          'div',
+          { 'class': 'boardInfo' },
+          React.createElement(
+            'a',
+            { href: "/tickets?id=" + board._id },
+            React.createElement(
+              'button',
+              { id: "boardNav" + index,
+                name: "boardNav" + index,
+                className: 'formSubmit' },
+              'View'
+            )
+          )
+        )
+      );
+    } else {
+      return React.createElement(
+        'div',
+        { key: board._id, className: 'board' },
+        React.createElement(
+          'h4',
+          { className: 'boardLabel' },
+          'Name: ',
+          board.name
+        ),
+        React.createElement(
+          'h4',
+          { className: 'boardLabel' },
+          'Tickets: None'
+        ),
+        React.createElement(
+          'div',
+          { 'class': 'boardInfo' },
+          React.createElement(
+            'a',
+            { href: "/tickets?id=" + board._id },
+            React.createElement(
+              'button',
+              { id: "boardNav" + index,
+                name: "boardNav" + index,
+                className: 'formSubmit' },
+              'View'
+            )
+          )
+        )
+      );
+    }
+  });
+
+  return React.createElement(
+    'div',
+    null,
+    sharedBoardNodes
+  );
+};
+
 var loadBoardsFromServer = function loadBoardsFromServer() {
   sendAjax('GET', '/getBoards', null, function (data) {
     ReactDOM.render(React.createElement(BoardList, { boards: data.boards, count: data.count }), document.querySelector("#boards"));
+    ReactDOM.render(React.createElement(SharedBoardList, { boards: data.sharedBoards }), document.querySelector("#sharedBoards"));
     ReactDOM.render(React.createElement(BoardForm, { csrf: data.csrfToken, count: data.count }), document.querySelector("#makeBoard"));
   });
 };
