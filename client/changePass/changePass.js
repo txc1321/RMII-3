@@ -1,3 +1,4 @@
+// function to handle change password submit
 const handleChangePass = (e) => {
   e.preventDefault();
 
@@ -19,6 +20,7 @@ const handleChangePass = (e) => {
   return false;
 };
 
+// change pass form
 const ChangePass = (props) => {
   return(
     <form id="changePasswordForm"
@@ -39,6 +41,7 @@ const ChangePass = (props) => {
   );
 };
 
+// function to launch form window
 const createChangePassWindow = (csrf) => {
   ReactDOM.render(
     <ChangePass csrf={csrf} />,
@@ -46,6 +49,7 @@ const createChangePassWindow = (csrf) => {
   );
 };
 
+// initial set up
 const setup = (csrf) => {
     createChangePassWindow(csrf);
 };
@@ -56,6 +60,7 @@ const getToken = () => {
   });
 };
 
+// on page load
 $(document).ready(function() {
   $('#consoleMessage').hide();
   $('#loginConsoleMessage').hide();

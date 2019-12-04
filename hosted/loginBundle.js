@@ -1,5 +1,6 @@
 "use strict";
 
+// handle login function
 var handleLogin = function handleLogin(e) {
   e.preventDefault();
 
@@ -15,6 +16,7 @@ var handleLogin = function handleLogin(e) {
   return false;
 };
 
+// handle sign-up function
 var handleSignup = function handleSignup(e) {
   e.preventDefault();
 
@@ -32,6 +34,7 @@ var handleSignup = function handleSignup(e) {
   return false;
 };
 
+// login form
 var LoginWindow = function LoginWindow(props) {
   return React.createElement(
     "form",
@@ -59,6 +62,7 @@ var LoginWindow = function LoginWindow(props) {
   );
 };
 
+// sign-up form
 var SignUpWindow = function SignUpWindow(props) {
   return React.createElement(
     "form",
@@ -92,10 +96,12 @@ var SignUpWindow = function SignUpWindow(props) {
   );
 };
 
+// render login form
 var createLoginWindow = function createLoginWindow(csrf) {
   ReactDOM.render(React.createElement(LoginWindow, { csrf: csrf }), document.querySelector("#content"));
 };
 
+// render sign-up form
 var createSignupWindow = function createSignupWindow(csrf) {
   ReactDOM.render(React.createElement(SignUpWindow, { csrf: csrf }), document.querySelector("#content"));
 };
@@ -110,6 +116,7 @@ var setSubmit = function setSubmit(uID) {
   });
 };
 
+// initial set-up
 var setup = function setup(csrf) {
   // set submit for non user input forms
   for (var i = 0; i < 5; i++) {
@@ -144,6 +151,7 @@ var getToken = function getToken() {
   });
 };
 
+// on page load
 $(document).ready(function () {
   $('#consoleMessage').hide();
   $('#loginConsoleMessage').hide();
@@ -151,6 +159,7 @@ $(document).ready(function () {
 });
 'use strict';
 
+// error function
 var handleError = function handleError(message) {
   console.log(message);
   $('#consoleMessage').html(message);
@@ -159,10 +168,12 @@ var handleError = function handleError(message) {
   $('#loginConsoleMessage').show();
 };
 
+// redirect function
 var redirect = function redirect(response) {
   window.location = response.redirect;
 };
 
+// send ajax helper
 var sendAjax = function sendAjax(type, action, data, success) {
   $.ajax({
     cache: false,

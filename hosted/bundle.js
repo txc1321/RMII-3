@@ -2,6 +2,7 @@
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+// functions to make a new board, and delete a board
 var handleBoard = function handleBoard(e) {
   e.preventDefault();
 
@@ -38,6 +39,7 @@ var handleDelete = function handleDelete(ID) {
   return false;
 };
 
+// Board form render
 var BoardForm = function BoardForm(props) {
   var _React$createElement;
 
@@ -64,7 +66,9 @@ var BoardForm = function BoardForm(props) {
   );
 };
 
+// Board list render
 var BoardList = function BoardList(props) {
+  // Render if no boards
   if (props.boards.length === 0) {
     return React.createElement(
       'h3',
@@ -74,7 +78,7 @@ var BoardList = function BoardList(props) {
   }
 
   var boardNodes = props.boards.map(function (board, index) {
-    console.log();
+    // Render tickets and ticketless version respectively
     if (board.tickets) {
       return React.createElement(
         'div',
@@ -161,37 +165,41 @@ var BoardList = function BoardList(props) {
     }
   });
 
-  return React.createElement(
-    'div',
-    { className: 'remainingBoards' },
-    React.createElement(
-      'h3',
-      { className: 'boardsLeft' },
-      'Free Boards Remaining: ',
-      5 - props.count
-    ),
+  return (
+    // Render wrapping divs
     React.createElement(
       'div',
-      { className: 'premium' },
+      { className: 'remainingBoards' },
       React.createElement(
-        'h6',
-        { className: 'premiumCTA' },
-        'Want to upgrade?'
+        'h3',
+        { className: 'boardsLeft' },
+        'Free Boards Remaining: ',
+        5 - props.count
       ),
       React.createElement(
-        'button',
-        { className: 'btn btn-link premiumButton' },
+        'div',
+        { className: 'premium' },
         React.createElement(
-          'a',
-          { href: '/upgrade' },
-          'Upgrade'
+          'h6',
+          { className: 'premiumCTA' },
+          'Want to upgrade?'
+        ),
+        React.createElement(
+          'button',
+          { className: 'btn btn-link premiumButton' },
+          React.createElement(
+            'a',
+            { href: '/upgrade' },
+            'Upgrade'
+          )
         )
-      )
-    ),
-    boardNodes
+      ),
+      boardNodes
+    )
   );
 };
 
+// Get boards from server function
 var loadBoardsFromServer = function loadBoardsFromServer() {
   sendAjax('GET', '/getBoards', null, function (data) {
     ReactDOM.render(React.createElement(BoardList, { boards: data.boards, count: data.count }), document.querySelector("#boards"));
@@ -199,6 +207,7 @@ var loadBoardsFromServer = function loadBoardsFromServer() {
   });
 };
 
+// initial page set up
 var setup = function setup(csrf) {
   var count = 0;
 
@@ -215,6 +224,7 @@ var getToken = function getToken() {
   });
 };
 
+// On page load
 $(document).ready(function () {
   getToken();
   $('#consoleMessage').hide();
@@ -222,6 +232,7 @@ $(document).ready(function () {
 });
 'use strict';
 
+// error function
 var handleError = function handleError(message) {
   console.log(message);
   $('#consoleMessage').html(message);
@@ -230,10 +241,12 @@ var handleError = function handleError(message) {
   $('#loginConsoleMessage').show();
 };
 
+// redirect function
 var redirect = function redirect(response) {
   window.location = response.redirect;
 };
 
+// send ajax helper
 var sendAjax = function sendAjax(type, action, data, success) {
   $.ajax({
     cache: false,

@@ -1,3 +1,4 @@
+// handle login function
 const handleLogin = (e) => {
   e.preventDefault();
 
@@ -13,6 +14,7 @@ const handleLogin = (e) => {
   return false;
 };
 
+// handle sign-up function
 const handleSignup = (e) => {
   e.preventDefault();
 
@@ -30,6 +32,7 @@ const handleSignup = (e) => {
   return false;
 };
 
+// login form
 const LoginWindow = (props) => {
     return(
     <form id="loginForm"
@@ -53,6 +56,7 @@ const LoginWindow = (props) => {
   );
 };
 
+// sign-up form
 const SignUpWindow = (props) => {
     return(
       <form id="signupForm"
@@ -75,6 +79,7 @@ const SignUpWindow = (props) => {
   );
 };
 
+// render login form
 const createLoginWindow = (csrf) => {
     ReactDOM.render(
     <LoginWindow csrf={csrf} />,
@@ -82,6 +87,7 @@ const createLoginWindow = (csrf) => {
   );
 };
 
+// render sign-up form
 const createSignupWindow = (csrf) => {
     ReactDOM.render(
     <SignUpWindow csrf={csrf} />,
@@ -99,6 +105,7 @@ const setSubmit = (uID) => {
   });
 };
 
+// initial set-up
 const setup = (csrf) => {
   // set submit for non user input forms
   for (let i = 0; i < 5; i++) {
@@ -133,6 +140,7 @@ const getToken = () => {
   });
 };
 
+// on page load
 $(document).ready(function() {
   $('#consoleMessage').hide();
   $('#loginConsoleMessage').hide();

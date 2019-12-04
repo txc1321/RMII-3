@@ -1,5 +1,6 @@
 'use strict';
 
+// Functions to handle making a new ticket and deleting one
 var handleTicket = function handleTicket(e) {
   e.preventDefault();
 
@@ -30,6 +31,7 @@ var handleDelete = function handleDelete(ID, boardID) {
   return false;
 };
 
+// Function to edit a ticket
 var handleEdit = function handleEdit(e) {
   e.preventDefault();
 
@@ -45,6 +47,7 @@ var handleEdit = function handleEdit(e) {
   return false;
 };
 
+// Function to load edit ticket form
 var handleEditForm = function handleEditForm(ID, boardID) {
   sendAjax('GET', '/getToken', null, function (result) {
     createEditForm(result.csrfToken);
@@ -55,6 +58,7 @@ var handleEditForm = function handleEditForm(ID, boardID) {
   };
 };
 
+// Function to make a new comment
 var handleComment = function handleComment(e) {
   e.preventDefault();
   var ID = e.currentTarget.parentElement.parentElement.id;
@@ -62,6 +66,7 @@ var handleComment = function handleComment(e) {
     handleError('You must make a comment');
     return false;
   } else {
+    // Form is rendered post page load, must grab everything through dom, no jquery
     var form = e.currentTarget;
     var action = form.action;
     var comment = document.querySelector('#' + form.id + ' input[name=comment]').value;
@@ -81,6 +86,7 @@ var handleComment = function handleComment(e) {
   }
 };
 
+// Function to delete comment
 var handleDeleteComment = function handleDeleteComment(ID, ticketID) {
   sendAjax('GET', '/getToken', null, function (result) {
     sendDelete(result.csrfToken);
@@ -96,6 +102,7 @@ var handleDeleteComment = function handleDeleteComment(ID, ticketID) {
   return false;
 };
 
+// Function to load comment form
 var handleCommentForm = function handleCommentForm(ID) {
   var toggle = true;
   if (document.querySelector('#commentForm' + ID)) {
@@ -105,11 +112,13 @@ var handleCommentForm = function handleCommentForm(ID) {
   if (toggle) {
     loadCommentsFromServer(ID);
   } else {
+    // Render blank if not showing comments
     ReactDOM.render(React.createElement(CommentBlank, null), document.querySelector("#comments" + ID));
     ReactDOM.render(React.createElement(CommentBlank, null), document.querySelector("#commentsForm" + ID));
   }
 };
 
+// Comment form
 var CommentForm = function CommentForm(props) {
   return React.createElement(
     'form',
@@ -136,6 +145,7 @@ var CommentForm = function CommentForm(props) {
   );
 };
 
+// Edit ticket form
 var EditTicketForm = function EditTicketForm(props) {
   return React.createElement(
     'div',
@@ -172,6 +182,7 @@ var EditTicketForm = function EditTicketForm(props) {
   );
 };
 
+// Ticket form
 var TicketForm = function TicketForm(props) {
   return React.createElement(
     'div',
@@ -207,8 +218,10 @@ var TicketForm = function TicketForm(props) {
   );
 };
 
+// Comment list
 var CommentList = function CommentList(props) {
   if (!props.comments) {
+    // Render if no comments
     return React.createElement(
       'div',
       null,
@@ -245,10 +258,12 @@ var CommentList = function CommentList(props) {
   }
 };
 
+// Blank render
 var CommentBlank = function CommentBlank() {
   return React.createElement('div', null);
 };
 
+// Ticket list
 var TicketList = function TicketList(props) {
   if (!props.priorities.tickets) {
     return React.createElement(
@@ -272,6 +287,8 @@ var TicketList = function TicketList(props) {
             'Priority: ',
             5 - index
           ),
+
+          // date formatting
           tickets.map(function (ticket, index) {
             var date = new Date(ticket.dueDate);
             var day = date.getDate();
@@ -367,7 +384,9 @@ var TicketList = function TicketList(props) {
   }
 };
 
+// Grab tickets from server
 var loadTicketsFromServer = function loadTicketsFromServer() {
+  // extract id from url
   var boardID = window.location.search.substring(4);
 
   sendAjax('GET', '/getTickets?id=' + boardID, null, function (data) {
@@ -376,8 +395,11 @@ var loadTicketsFromServer = function loadTicketsFromServer() {
   });
 };
 
+// Grab comments from server
 var loadCommentsFromServer = function loadCommentsFromServer(ID) {
+  // extract id from url
   var token = document.querySelector('#globalCSRF').value;
+  // extract csrf from global element
   var boardID = window.location.search.substring(4);
 
   sendAjax('GET', '/getComments?id=' + ID, null, function (data) {
@@ -386,6 +408,7 @@ var loadCommentsFromServer = function loadCommentsFromServer(ID) {
   });
 };
 
+// initial set up
 var setup = function setup(csrf) {
   ReactDOM.render(React.createElement(TicketForm, { csrf: csrf, boardID: '' }), document.querySelector("#makeTicket"));
 
@@ -400,6 +423,7 @@ var getToken = function getToken() {
   });
 };
 
+// on page load
 $(document).ready(function () {
   getToken();
   $('#consoleMessage').hide();
@@ -407,6 +431,7 @@ $(document).ready(function () {
 });
 'use strict';
 
+// error function
 var handleError = function handleError(message) {
   console.log(message);
   $('#consoleMessage').html(message);
@@ -415,10 +440,12 @@ var handleError = function handleError(message) {
   $('#loginConsoleMessage').show();
 };
 
+// redirect function
 var redirect = function redirect(response) {
   window.location = response.redirect;
 };
 
+// send ajax helper
 var sendAjax = function sendAjax(type, action, data, success) {
   $.ajax({
     cache: false,

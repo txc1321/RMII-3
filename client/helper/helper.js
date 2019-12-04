@@ -1,3 +1,4 @@
+// error function
 const handleError = (message) => {
   console.log(message);
   $('#consoleMessage').html(message);
@@ -6,10 +7,12 @@ const handleError = (message) => {
   $('#loginConsoleMessage').show();
 };
 
+// redirect function
 const redirect = (response) => {
   window.location = response.redirect;
 };
 
+// send ajax helper
 const sendAjax = (type, action, data, success) => {
   $.ajax({
     cache: false,

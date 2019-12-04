@@ -1,3 +1,4 @@
+// Functions to handle making a new ticket and deleting one
 const handleTicket = (e) => {
   e.preventDefault();
 
@@ -30,6 +31,7 @@ const handleDelete = (ID, boardID) => {
   return false;
 };
 
+// Function to edit a ticket
 const handleEdit = (e) => {
   e.preventDefault();
 
@@ -48,6 +50,7 @@ const handleEdit = (e) => {
   return false;
 };
 
+// Function to load edit ticket form
 const handleEditForm = (ID, boardID) => {
   sendAjax('GET', '/getToken', null, (result) => {
     createEditForm(result.csrfToken);
@@ -60,6 +63,7 @@ const handleEditForm = (ID, boardID) => {
   };
 };
 
+// Function to make a new comment
 const handleComment = (e) => {
   e.preventDefault();
   const ID = e.currentTarget.parentElement.parentElement.id;
@@ -68,6 +72,7 @@ const handleComment = (e) => {
     return false;
   }
   else{
+    // Form is rendered post page load, must grab everything through dom, no jquery
     const form = e.currentTarget;
     const action = form.action;
     const comment = document.querySelector('#' + form.id + ' input[name=comment]').value;
@@ -87,6 +92,7 @@ const handleComment = (e) => {
   }
 };
 
+// Function to delete comment
 const handleDeleteComment = (ID, ticketID) => {
   sendAjax('GET', '/getToken', null, (result) => {
     sendDelete(result.csrfToken);
@@ -102,6 +108,7 @@ const handleDeleteComment = (ID, ticketID) => {
   return false;
 };
 
+// Function to load comment form
 const handleCommentForm = (ID) => {
   let toggle = true;
   if(document.querySelector('#commentForm' + ID)){
@@ -112,6 +119,7 @@ const handleCommentForm = (ID) => {
     loadCommentsFromServer(ID);
   }
   else{
+    // Render blank if not showing comments
       ReactDOM.render(
         <CommentBlank />, document.querySelector("#comments" + ID)
       );
@@ -121,6 +129,7 @@ const handleCommentForm = (ID) => {
   }
 };
 
+// Comment form
 const CommentForm = (props) => {
   return(
     <form id={"commentForm" + props.id}
@@ -143,6 +152,7 @@ const CommentForm = (props) => {
   );
 };
 
+// Edit ticket form
 const EditTicketForm = (props) => {
   return(
     <div className="ticketFormContainer">
@@ -173,6 +183,7 @@ const EditTicketForm = (props) => {
   );
 };
 
+// Ticket form
 const TicketForm = (props) => {
   return(
     <div className="ticketFormContainer">
@@ -202,8 +213,10 @@ const TicketForm = (props) => {
   );
 };
 
+// Comment list
 const CommentList = function(props) {
   if(!props.comments) {
+    // Render if no comments
     return(
       <div>
         <h3>No comments</h3>
@@ -232,12 +245,14 @@ const CommentList = function(props) {
   }
 };
 
+// Blank render
 const CommentBlank = function() {
   return(
     <div></div>
   );
 };
 
+// Ticket list
 const TicketList = function(props) {
   if(!props.priorities.tickets) {
     return(
@@ -253,6 +268,7 @@ const TicketList = function(props) {
           <div className="ticketContainer">
             <h3>Priority: {5-index}</h3>
             {
+              // date formatting
               tickets.map((ticket, index) => {
                 const date = new Date(ticket.dueDate);
                 const day = date.getDate();
@@ -309,7 +325,9 @@ const TicketList = function(props) {
   }
 };
 
+// Grab tickets from server
 const loadTicketsFromServer = () => {
+  // extract id from url
   const boardID = window.location.search.substring(4);
 
   sendAjax('GET', `/getTickets?id=${boardID}`, null, (data) => {
@@ -322,8 +340,11 @@ const loadTicketsFromServer = () => {
   });
 };
 
+// Grab comments from server
 const loadCommentsFromServer = (ID) => {
+  // extract id from url
   const token = document.querySelector('#globalCSRF').value;
+  // extract csrf from global element
   const boardID = window.location.search.substring(4);
 
   sendAjax('GET', `/getComments?id=${ID}`, null, (data) => {
@@ -336,6 +357,7 @@ const loadCommentsFromServer = (ID) => {
   });
 };
 
+// initial set up
 const setup = function(csrf) {
   ReactDOM.render(
     <TicketForm csrf={csrf} boardID={''} />, document.querySelector("#makeTicket")
@@ -354,6 +376,7 @@ const getToken = () => {
   });
 };
 
+// on page load
 $(document).ready(function() {
   getToken();
   $('#consoleMessage').hide();

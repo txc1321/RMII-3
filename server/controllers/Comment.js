@@ -3,13 +3,13 @@ const Comment = models.Comment;
 const Ticket = models.Ticket;
 
 
-// sort tickets by priority function
+// get comments
 const getComments = (req, res) => {
-  // grabs board ID from url
+  // grabs ticket ID from url
   const ticketID = req.query.id;
   // array for ticket manipulation
   let allComments = [];
-  // promise that finds tickets based on owner and board
+  // promise that finds comments based on owner and ticket
   const commentPromise = Comment.CommentModel.findByOwnerAndTicket(
     req.session.account._id,
     ticketID,
@@ -30,7 +30,7 @@ const getComments = (req, res) => {
 };
 
 
-// make new ticket function
+// make new comment function
 const makeComment = (req, res) => {
   // check for empty fields
   if (!req.body.comment) {
@@ -56,14 +56,14 @@ const makeComment = (req, res) => {
     return res.status(400).json({ error: 'An error occurred' });
   });
 
-  // grab board id from form and find the specific board
+  // find associated ticket
   const search = { _id: req.body.ticketID };
   const ticketPromise = Ticket.TicketModel.findOne(search, (err, docs) => {
     if (err) {
       return res.status(400).json({ error: 'An error occurred' });
     }
     const newComments = [];
-    // add new ticket to board tickets list
+    // add new comment to ticket comments list
     newComments.push(commentPromise);
     const allComments = docs.comments.concat(newComments);
     docs.comments.splice(0, docs.comments.length, ...allComments);

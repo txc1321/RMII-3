@@ -1,3 +1,4 @@
+// functions to make a new board, and delete a board
 const handleBoard = (e) => {
   e.preventDefault();
 
@@ -34,6 +35,7 @@ const handleDelete = (ID) => {
   return false;
 };
 
+// Board form render
 const BoardForm = (props) => {
   return(
     <div className="boardFormContainer">
@@ -55,7 +57,9 @@ const BoardForm = (props) => {
   );
 };
 
+// Board list render
 const BoardList = function(props) {
+  // Render if no boards
   if(props.boards.length === 0){
     return(
       <h3 className="emptyBoards">No Boards</h3>
@@ -63,7 +67,7 @@ const BoardList = function(props) {
   }
 
   const boardNodes = props.boards.map(function(board, index){
-    console.log();
+    // Render tickets and ticketless version respectively
     if (board.tickets) {
       return (
         <div key={board._id} className="board">
@@ -113,6 +117,7 @@ const BoardList = function(props) {
   });
 
   return(
+    // Render wrapping divs
     <div className="remainingBoards">
       <h3 className="boardsLeft">Free Boards Remaining: {5 - props.count}</h3>
       <div className="premium">
@@ -124,6 +129,7 @@ const BoardList = function(props) {
   );
 };
 
+// Get boards from server function
 const loadBoardsFromServer = () => {
   sendAjax('GET', '/getBoards', null, (data) => {
     ReactDOM.render(
@@ -135,6 +141,7 @@ const loadBoardsFromServer = () => {
   });
 };
 
+// initial page set up
 const setup = function(csrf) {
   let count = 0;
 
@@ -155,6 +162,7 @@ const getToken = () => {
   });
 };
 
+// On page load
 $(document).ready(function() {
   getToken();
   $('#consoleMessage').hide();
