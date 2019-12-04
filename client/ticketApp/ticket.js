@@ -72,7 +72,8 @@ const handleComment = (e) => {
     return false;
   }
   else{
-    // Form is rendered post page load, must grab everything through dom, no jquery
+    // Form is rendered post page load, must grab everything through dom
+    // Jquery has been banished to the corner
     const form = e.currentTarget;
     const action = form.action;
     const comment = document.querySelector('#' + form.id + ' input[name=comment]').value;
